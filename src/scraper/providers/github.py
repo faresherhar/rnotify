@@ -18,7 +18,7 @@ def get_latest_release(repo_name: str):
     return response.json() if response.status_code == 200 else None
 
 
-def get_release(repo_name: str, release_id: str):
+def get_release(repo_name: str, release_id: int):
     response = requests.get(
         settings.GITHUB_API + f"{repo_name}/releases/{release_id}",
         headers=settings.GITHUB_HEADERS,
