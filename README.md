@@ -6,3 +6,7 @@ make setup
 
 make test
 ```
+
+## Schema
+
+![Scema](schema/schema.svg "Schema")
