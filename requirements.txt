@@ -1,4 +1,0 @@
-requests
-schema
-pyyaml
-pytest

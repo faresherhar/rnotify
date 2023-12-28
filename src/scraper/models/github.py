@@ -1,0 +1,11 @@
+from sqlalchemy import Column, String, Integer, JSON
+
+from database import Base
+
+
+class Github(Base):
+    __tablename__ = "github"
+
+    repo = Column(String(50), nullable=False, primary_key=True)
+    release_id = Column(Integer, nullable=False, primary_key=True)
+    release_body = Column(JSON, nullable=False)

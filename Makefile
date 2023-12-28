@@ -1,9 +1,12 @@
 setup:
-	@pip install -r requirements.txt
-	@pip install black
+	@find . -wholename "./requirements/*.txt" -type f -exec pip install -r '{}' ';'
 
 test:
 	@pytest
 
 clean:
 	@find -name '*__pycache__' | xargs rm -rf
+
+
+run_scraper:
+	@python src/scraper/main.py
