@@ -7,7 +7,7 @@ def get_release(
     repo_name: str,
     release_id: int,
     db_session: Session,
-):
+) -> Github | None:
     return (
         db_session.query(Github)
         .filter(Github.repo_name == repo_name, Github.release_id == release_id)

@@ -15,7 +15,7 @@ class Github(Base):
         repo_name: str,
         release_id: int,
         release_body: dict[str, str | dict[str, str]],
-    ):
+    ) -> None:
         self.repo_name = repo_name
         self.release_id = release_id
         self.release_body = release_body
