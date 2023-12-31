@@ -1,8 +1,9 @@
-# from scraper.providers.github.github import get_latest_release
-# import json
+from providers.github import get_latest_release
 
 from database import SessionLocal, engine
 from models.github import Github
+from cruds.github import add_release
+
 
 Github.metadata.create_all(bind=engine)
 
@@ -10,10 +11,18 @@ Github.metadata.create_all(bind=engine)
 def get_db():
     db = SessionLocal()
     try:
-        yield db
+        return db
     except:
         db.close()
 
 
-# get_db()
-# print(json.dumps(get_latest_release("grafana/grafana")))
+repo_name = "grafana/grafana"
+release_body = get_latest_release(repo_name)
+
+
+add_release(
+    repo_name=repo_name,
+    release_id=release_body["id"],
+    release_body=release_body,
+    db_session=get_db(),
+)

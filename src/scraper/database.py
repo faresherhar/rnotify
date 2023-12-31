@@ -6,6 +6,6 @@ from config import settings
 
 
 engine = create_engine(settings.DATABASE_URI)
-SessionLocal = sessionmaker(auto_commit=False, auto_flash=False, bind=engine)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 Base = declarative_base()
