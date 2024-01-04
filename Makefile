@@ -9,4 +9,4 @@ clean:
 
 
 run_scraper:
-	@python src/scraper/main.py
+	@python src/main.py

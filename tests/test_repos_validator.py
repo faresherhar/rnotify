@@ -1,6 +1,6 @@
 from yaml import safe_load
 
-from src.scraper.utils.repos_validator import validate_repos
+from src.utils.repos_validator import validate_repos
 
 
 def test_good_repos():

@@ -21,7 +21,15 @@ def add_release(
     release_body: dict[str, str | dict[str, str]],
     db_session: Session,
 ) -> None:
-    db_session.add(Github(repo_name, release_id, release_body))
+    db_session.add(
+        Github(
+            repo_name=repo_name,
+            release_id=release_id,
+            release_body=release_body,
+            notified=False,
+        )
+    )
+
     db_session.commit()
 
 
@@ -31,7 +39,9 @@ def update_release(
     release_body: dict[str, str | dict[str, str]],
     db_session: Session,
 ) -> None:
-    release = get_release(repo_name, release_id, db_session)
+    release = get_release(
+        repo_name=repo_name, release_id=release_id, db_session=db_session
+    )
     release.release_id = release_id
     release.release_body = release_body
 
