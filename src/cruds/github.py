@@ -1,9 +1,14 @@
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from models.github import Github
 
 
-def get_release(
+def get_github_releases(db_session: Session) -> list[Github]:
+    return db_session.query(Github).all()
+
+
+def get_github_release(
     repo_name: str,
     release_id: int,
     db_session: Session,
@@ -15,7 +20,7 @@ def get_release(
     )
 
 
-def add_release(
+def add_github_release(
     repo_name: str,
     release_id: int,
     release_body: dict[str, str | dict[str, str]],
@@ -30,16 +35,19 @@ def add_release(
         )
     )
 
-    db_session.commit()
+    try:
+        db_session.commit()
+    except IntegrityError:
+        pass
 
 
-def update_release(
+def update_github_release(
     repo_name: str,
     release_id: int,
     release_body: dict[str, str | dict[str, str]],
     db_session: Session,
 ) -> None:
-    release = get_release(
+    release = get_github_release(
         repo_name=repo_name, release_id=release_id, db_session=db_session
     )
     release.release_id = release_id

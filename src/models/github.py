@@ -10,3 +10,12 @@ class Github(Base):
     release_id = Column(Integer, nullable=False, primary_key=True)
     release_body = Column(JSON, nullable=False)
     notified = Column(Boolean, nullable=False)
+
+    def as_dict(self):
+        return {
+            "provider": self.__tablename__,
+            "repo_name": self.repo_name,
+            "release_id": self.release_id,
+            "release_body": self.release_body,
+            "notified": self.notified,
+        }
