@@ -9,7 +9,7 @@ make test
 
 ## Schema
 
-![Scema](schema/schema.svg "Schema")
+![Scema](diagram/diagram.svg "Diagram")
 
 
 curl https://gitlab.com/api/v4/projects/AuroraOSS%2FAuroraStore/releases
