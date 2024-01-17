@@ -10,10 +10,3 @@ make test
 ## Schema
 
 ![Scema](diagram/diagram.svg "Diagram")
-
-
-curl https://gitlab.com/api/v4/projects/AuroraOSS%2FAuroraStore/releases
-
-curl https://gitlab.com/api/v4/projects/AuroraOSS%2FAuroraStore/releases/permalink/latest
-
-curl https://gitlab.com/api/v4/projects/AuroraOSS%2FAuroraStore/releases/3.2.8

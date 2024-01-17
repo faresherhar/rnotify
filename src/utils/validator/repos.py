@@ -13,5 +13,5 @@ def validate_repos(config_dict: dict[str, list[str]]) -> (bool, SchemaError | No
     try:
         config_schema.validate(config_dict)
         return True, None
-    except SchemaError as se:
-        return False, se
+    except SchemaError as err:
+        return False, err

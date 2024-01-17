@@ -1,3 +1,3 @@
-class EmptyConfigError(Exception):
+class EmptyReposFileError(Exception):
     def __str__(self):
-        return "Configuration File is Empty."
+        return "Repos File is Empty"
