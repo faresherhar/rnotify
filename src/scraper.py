@@ -4,8 +4,8 @@ import logging
 from utils.validator.repos import validate_repos
 from database import SessionLocal, engine
 from config import settings
-from exc import EmptyReposFileError
-import logging_config
+from utils.exc import EmptyReposFileError
+import utils.logging_config as logging_config
 
 from utils.providers.github import get_github_latest_release
 from cruds.github import add_github_release
@@ -52,21 +52,20 @@ with open(settings.REPOS_FILE, "r") as file:
         raise err
 
 # Fetch Repos Data
-logger.info("Fetching Repos Data")
 for provider in config_dict.keys():
     if provider == "github":
-        logger.info("Adding Github Data")
+        logger.info("Fetching Github Data")
         for repo_name in config_dict["github"]:
             release_body = get_github_latest_release(repo_name)
             if release_body:
                 add_github_release(
                     repo_name=repo_name,
-                    release_id=release_body["id"],
+                    tag_name=release_body["tag_name"],
                     release_body=release_body,
                     db_session=get_db_session(),
                 )
     if provider == "gitlab":
-        logger.info("Adding Gitlab Data")
+        logger.info("Fetching Gitlab Data")
         for repo_name in config_dict["gitlab"]:
             release_body = get_gitlab_latest_release(repo_name)
             if release_body:

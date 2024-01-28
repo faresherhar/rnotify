@@ -5,7 +5,7 @@ from sqlalchemy.exc import SQLAlchemyError
 import logging
 
 from config import settings
-import logging_config
+import utils.logging_config as logging_config
 
 
 # Define logger
