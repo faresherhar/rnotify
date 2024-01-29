@@ -2,18 +2,15 @@ from yaml import safe_load
 import logging
 
 from utils.validator.repos import validate_repos
+from utils.exc import EmptyReposFileError
+import utils.logging_config
 from database import SessionLocal, engine
 from config import settings
-from utils.exc import EmptyReposFileError
-import utils.logging_config as logging_config
 
 from utils.providers.github import get_github_latest_release
-from cruds.github import add_github_release
-from models.github import Github
-
 from utils.providers.gitlab import get_gitlab_latest_release
-from cruds.gitlab import add_gitlab_release
-from models.gitlab import Gitlab
+from cruds.repo import add_release
+from models.repo import Repo
 
 
 # Create DB Session
@@ -30,8 +27,7 @@ logger = logging.getLogger(__name__)
 
 # Create Tables [IF NOT EXISTS]
 logger.info("Initiating Tables Creation")
-Github.metadata.create_all(bind=engine)
-Gitlab.metadata.create_all(bind=engine)
+Repo.metadata.create_all(bind=engine)
 
 
 # Load Repos Configuration
@@ -58,18 +54,21 @@ for provider in config_dict.keys():
         for repo_name in config_dict["github"]:
             release_body = get_github_latest_release(repo_name)
             if release_body:
-                add_github_release(
+                add_release(
+                    provider=provider,
                     repo_name=repo_name,
                     tag_name=release_body["tag_name"],
                     release_body=release_body,
                     db_session=get_db_session(),
                 )
+
     if provider == "gitlab":
         logger.info("Fetching Gitlab Data")
         for repo_name in config_dict["gitlab"]:
             release_body = get_gitlab_latest_release(repo_name)
             if release_body:
-                add_gitlab_release(
+                add_release(
+                    provider=provider,
                     repo_name=repo_name,
                     tag_name=release_body["tag_name"],
                     release_body=release_body,
