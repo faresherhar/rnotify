@@ -7,3 +7,6 @@ clean:
 
 run_scraper:
 	@python src/scraper.py
+
+run_notifier:
+	@python src/notifier.py

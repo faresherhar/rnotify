@@ -1,10 +1,10 @@
-from sqlalchemy import Column, String, Integer, JSON, Boolean
+from sqlalchemy import Column, String, JSON, Boolean
 
 from database import Base
 
 
 class Repo(Base):
-    __tablename__ = "repos"
+    __tablename__ = "repo"
 
     provider = Column(String(255), nullable=False, primary_key=True)
     repo_name = Column(String(255), nullable=False, primary_key=True)

@@ -26,7 +26,7 @@ def get_release(
     tag_name: str,
     db_session: Session,
 ) -> Repo | None:
-    logger.info(f"Seraching fot {provider} release '{tag_name}'")
+    logger.info(f"Seraching fot {provider} repository {repo_name} release '{tag_name}'")
     return (
         db_session.query(Repo)
         .filter(Repo.repo_name == repo_name, Repo.tag_name == tag_name)
@@ -53,6 +53,6 @@ def add_release(
 
     try:
         db_session.commit()
-        logger.info(f"Adding {provider} release '{tag_name}'")
+        logger.info(f"Adding {provider} repository {repo_name} release '{tag_name}'")
     except IntegrityError:
-        logger.warning(f"{provider} release '{tag_name}' already exists")
+        logger.warning(f"{provider} repository {repo_name} release '{tag_name}' already exists")

@@ -22,19 +22,18 @@ def get_db_session():
         db_session.close()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # Define logger
     logger = logging.getLogger(__name__)
-    
-    # Create Tables [IF NOT EXISTS]
-    logger.info("Initiating Tables Creation")
-    Repo.metadata.create_all(bind=engine)
 
+    # Create Tables [IF NOT EXISTS]
+    logger.info("Initiating tables creation")
+    Repo.metadata.create_all(bind=engine)
 
     # Load Repos Configuration
     with open(settings.REPOS_FILE, "r") as file:
         # Read Repos Configuration File
-        logger.info("Loading Repos File")
+        logger.info("Loading repositories file")
         config_dict = safe_load(file)
 
         # Verify Empty Repos Configuration File
@@ -45,13 +44,13 @@ if __name__ == '__main__':
         # Validate Repos Configuration File
         repos_validation, err = validate_repos(config_dict=config_dict)
         if err:
-            logger.error("Unvalid Repos File")
+            logger.error("Unable to load repositories file")
             raise err
 
     # Fetch Repos Data
+    logger.info("Fetching repositories data")
     for provider in config_dict.keys():
         if provider == "github":
-            logger.info("Fetching Github Data")
             for repo_name in config_dict["github"]:
                 release_body = get_github_latest_release(repo_name)
                 if release_body:
@@ -64,7 +63,6 @@ if __name__ == '__main__':
                     )
 
         if provider == "gitlab":
-            logger.info("Fetching Gitlab Data")
             for repo_name in config_dict["gitlab"]:
                 release_body = get_gitlab_latest_release(repo_name)
                 if release_body:

@@ -9,6 +9,7 @@ from config import settings
 # Define logger
 logger = logging.getLogger(__name__)
 
+
 def get_gitlab_releases(repo_name: str) -> dict[str, str | dict[str, str]] | None:
     response = requests.get(
         settings.GITLAB_API + f"{quote(repo_name, safe='')}/releases"

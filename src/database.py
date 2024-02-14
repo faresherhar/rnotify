@@ -13,11 +13,11 @@ logger = logging.getLogger(__name__)
 
 # Connect to DBMS
 try:
-	logger.info("Establishing Databse Connection")
-	engine = create_engine(settings.DATABASE_URI)
+    logger.info("Establishing databse connection")
+    engine = create_engine(settings.DATABASE_URI)
 except SQLAlchemyError:
-	logger.error("Unable to Connect to Datasase")
-	raise SQLAlchemyError
+    logger.error("Unable to connect to datasase")
+    raise SQLAlchemyError
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
