@@ -10,7 +10,7 @@ A Python Application to track repositories releases
 
 - [ ] Support Coderberg
 - [ ] Support notification platforms
-  - Email
+  - ~~Email~~
   - Teams
   - Slack
   - Mattermost

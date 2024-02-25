@@ -15,7 +15,9 @@ config_schema = Schema(
 )
 
 
-def validate_repos(config_dict: dict[str, list[str]]) -> tuple[bool, SchemaError | None]:
+def validate_repos(
+    config_dict: dict[str, list[str]]
+) -> tuple[bool, SchemaError | None]:
     logger.info(f"Checking repositories configuration {config_dict}")
     try:
         config_schema.validate(config_dict)
