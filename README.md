@@ -11,11 +11,11 @@ A Python Application to track repositories releases
 - [ ] Support Coderberg
 - [ ] Support notification platforms
   - ~~Email~~
+  - ~~Slack~~
   - Teams
-  - Slack
   - Mattermost
   - Telegram
-  - Discord
+  - Discord~~
   - Signal
 
 ## Contributing
@@ -31,7 +31,7 @@ source .venv/bin/activate
 make setup
 
 # Create .env file
-cp .env.example .env
+cp .env.dev.example .env
 
 # Create local Database
 touch sqlite.db
