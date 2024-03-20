@@ -10,3 +10,7 @@ run_scraper:
 
 run_notifier:
 	@python src/notifier.py
+
+run_tests:
+	@pytest
+	@rm test.db

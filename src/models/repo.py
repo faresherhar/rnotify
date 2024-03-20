@@ -1,6 +1,9 @@
 from sqlalchemy import Column, String, JSON, Boolean
+from sqlalchemy.orm import DeclarativeBase
 
-from database import Base
+
+class Base(DeclarativeBase):
+    pass
 
 
 class Repo(Base):

@@ -18,7 +18,6 @@ def test_valid_gitlab_repo_releases():
     assert isinstance(release, list)
 
 
-
 def test_valid_gitlab_repo_latest_release():
     release = get_gitlab_latest_release(repo_name=valid_repo)
     assert isinstance(release, dict)
@@ -26,8 +25,8 @@ def test_valid_gitlab_repo_latest_release():
 
 def test_valid_gitlab_repo_release_by_tag_name():
     release = get_gitlab_release_by_tag_name(
-            repo_name=valid_repo, tag_name=valid_repo_tag_name
-        )
+        repo_name=valid_repo, tag_name=valid_repo_tag_name
+    )
     assert isinstance(release, dict)
 
 

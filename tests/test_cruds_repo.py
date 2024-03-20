@@ -1,31 +1,18 @@
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
-import pytest
 import json
-import os
 
 from cruds.repo import add_release, get_all_releases, get_releases, get_release
 from models.repo import Repo
 
 
-# Test DB
-TEST_DB = "test.db"
-
 # Create DB
-engine = create_engine(f"sqlite:///{TEST_DB}")
+engine = create_engine(f"sqlite:///test.db")
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 # Create table
 Repo.metadata.create_all(bind=engine)
-
-
-@pytest.fixture(autouse=True)
-def run_rm_test_db():
-    assert True
-    yield
-    os.remove(TEST_DB)
-    assert True
 
 
 # add_release
@@ -45,10 +32,6 @@ def test_add_release_github():
         assert False
 
 
-def test_add_release_exists_github():
-    test_add_release_github()
-
-
 def test_add_release_gitlab():
     try:
         with open("samples/release/gitlab_release_body.json") as file:
@@ -63,6 +46,10 @@ def test_add_release_gitlab():
         assert True
     except SQLAlchemyError:
         assert False
+
+
+def test_add_release_exists_github():
+    test_add_release_github()
 
 
 def test_add_release_exists_gitlab():
