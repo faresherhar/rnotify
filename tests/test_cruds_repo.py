@@ -32,7 +32,6 @@ def test_add_release_github():
                 provider="github",
                 repo_name="grafana/grafana",
                 tag_name=release_body["tag_name"],
-                release_body=release_body,
                 db_session=SessionLocal(),
             )
         assert True
@@ -48,7 +47,6 @@ def test_add_release_gitlab():
                 provider="gitlab",
                 repo_name="AuroraOSS/AuroraStore",
                 tag_name=release_body["tag_name"],
-                release_body=release_body,
                 db_session=SessionLocal(),
             )
         assert True

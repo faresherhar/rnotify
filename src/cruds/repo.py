@@ -49,7 +49,6 @@ def add_release(
     provider: str,
     repo_name: str,
     tag_name: str,
-    release_body: dict[str, str | dict[str, str]],
     db_session: Session,
 ) -> None:
     db_session.add(
@@ -57,7 +56,6 @@ def add_release(
             provider=provider,
             repo_name=repo_name,
             tag_name=tag_name,
-            release_body=release_body,
             notified=False,
         )
     )

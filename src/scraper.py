@@ -54,7 +54,6 @@ if __name__ == "__main__":
                         provider=provider,
                         repo_name=repo_name,
                         tag_name=release_body["tag_name"],
-                        release_body=release_body,
                         db_session=get_db_session(),
                     )
 
@@ -66,6 +65,5 @@ if __name__ == "__main__":
                         provider=provider,
                         repo_name=repo_name,
                         tag_name=release_body["tag_name"],
-                        release_body=release_body,
                         db_session=get_db_session(),
                     )
