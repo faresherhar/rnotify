@@ -3,9 +3,12 @@ from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
-    DATABASE_URI: str = Field(validation_alias="UPME_DATABASE_URI")
-    REPOS_FILE: str = Field(validation_alias="UPME_REPOS_FILE")
-    NOTIFICATION_TEMPLATES: str = Field(validation_alias="UPME_NOTIFICATION_TEMPLATES")
+    DATABASE_URI: str = Field(validation_alias="RNOTIFY_DATABASE_URI")
+    PROVIDERS_FILE: str = Field(validation_alias="RNOTIFY_PROVIDERS_FILE")
+    PLATFORMS_FILE: str = Field(validation_alias="RNOTIFY_PLATFORMS_FILE")
+    NOTIFICATION_TEMPLATES: str = Field(
+        validation_alias="RNOTIFY_NOTIFICATION_TEMPLATES"
+    )
 
     GITHUB_API: str = "https://api.github.com/repos/"
     GITHUB_RELEASE: str = "https://github.com/{repo}/releases/tag/{tag_name}"

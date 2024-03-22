@@ -15,7 +15,7 @@ def generate_release_url(provider: str, repo: str, tag_name: str) -> str | None:
 
 
 def render_notification(
-    provider: str, repo: str, release_name: str, tag_name: str, type: str = "txt"
+    provider: str, repo: str, tag_name: str, type: str = "txt"
 ) -> str | None:
     if not is_suppotred_type(type):
         return None
@@ -26,7 +26,6 @@ def render_notification(
     return template.render(
         provider=provider.title(),
         repo=repo,
-        release_name=release_name,
         tag_name=tag_name,
         release_url=generate_release_url(
             provider=provider, repo=repo, tag_name=tag_name

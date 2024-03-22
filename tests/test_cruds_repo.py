@@ -3,8 +3,16 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
 import json
 
-from cruds.repo import add_release, get_all_releases, get_releases, get_release
 from models.repo import Repo
+from cruds.repo import (
+    add_release,
+    get_all_releases,
+    get_releases,
+    get_release,
+    get_unnotified_releases,
+    update_release_notification_status,
+    delete_notified_release,
+)
 
 
 # Create DB
@@ -61,6 +69,11 @@ def test_get_all_releases():
     assert get_all_releases(db_session=SessionLocal()) != []
 
 
+# get_unnotified_releases
+def test_get_unnotified_releases():
+    assert get_unnotified_releases(db_session=SessionLocal()) != []
+
+
 # get_releases
 def test_get_github_releases():
     assert get_releases(provider="github", db_session=SessionLocal()) != []
@@ -96,3 +109,19 @@ def test_get_no_exists_release():
         )
         is None
     )
+
+
+# update_release_notification_status
+def test_update_release_notification_status():
+    for repo in get_unnotified_releases(db_session=SessionLocal()):
+        update_release_notification_status(
+            provider=repo.provider,
+            repo_name=repo.repo_name,
+            tag_name=repo.tag_name,
+            db_session=SessionLocal(),
+        )
+
+
+# delete_notified_release
+def test_delete_notified_release():
+    delete_notified_release(db_session=SessionLocal())

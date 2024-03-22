@@ -1,6 +1,0 @@
-github:
-  - grafana/grafana
-  - derailed/k9s
-
-gitlab:
-  - AuroraOSS/AuroraStore

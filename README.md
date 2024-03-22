@@ -1,4 +1,4 @@
-# Update Me Logo
+# Rnotify Logo
 
 <h2 align="center">The Repository Releases Tracker</h2>
 
@@ -16,7 +16,7 @@
 
 > Up-to-date to the latest release of your favorite opensource tools.”
 
-Upme is a Python tool for tracking releases. By using it, you are notified of the latest release of your configured repositories. It uses the Github, and Gitlab APIs to scrape the data of the releases related to your repositories, and sends you a notification about it, by Email, Slack, Telegram...
+RNOTIFY is a Python tool for tracking releases. By using it, you are notified of the latest release of your configured repositories. It uses the Github, and Gitlab APIs to scrape the data of the releases related to your repositories, and sends you a notification about it, by Email, Slack, Telegram...
 
 Please refer to the documentation below, for more details, installation instrucions, and configuration.
 
@@ -38,33 +38,52 @@ Please refer to the documentation below, for more details, installation instruci
 
 ### Setup Development Enviroment
 
-```shell
-# Create development enviroment
+```sh
+# Setup development enviroment
 python3 -m venv .venv/
 source .venv/bin/activate
-
-# Install dependencies
+pip install --upgrade pip
 make setup
 
-# Create .env file
+# Setup enviroment variables
 cp .env.example .env
+set -a && source .env && set +a
 
-# Create local Database
+# Setup configuration files
+mkdir ${RNOTIFY_CONFIG_DIR}
+touch ${RNOTIFY_PROVIDERS_FILE} ${RNOTIFY_PLATFORMS_FILE}
+cat >> ${RNOTIFY_PROVIDERS_FILE}<< EOF
+github:
+  - grafana/grafana
+  - derailed/k9s
+
+gitlab:
+  - AuroraOSS/AuroraStore
+EOF
+
+cat >> ${RNOTIFY_PLATFORMS_FILE}<< EOF
+email:
+    receiver_email: some.user@gmail.com
+    smtp_server: smtp.gmail.com
+    user_email: user@gmail.com
+    user_password: passwd
+    port: 465
+    message_type: html
+EOF
+
+# Create local DB
 touch sqlite.db
-
-# Load enviroment variables
-export $(grep -v '^#' .env | xargs)
-```
-
-### Run Tests
-
-```shell
-# Run tests
-make run_tests
 ```
 
 ### DataBase
 
-For development we're using `SQLite DB`. If you want to use another RDBMS, please update the `UPME_DATABASE_URI` in the enviroment variable, and reload the new values `export $(grep -v '^#' .env | xargs)`.
+For development we're using `SQLite DB`. If you want to use another RDBMS, please update the `RNOTIFY_DATABASE_URI` in the enviroment variable, and reload the new values `set -a && source .env && set +a`.
 
 To explore the `SQLite DB`, we recommend using the [SQLite Browser](https://sqlitebrowser.org/).
+
+### Run Tests
+
+```sh
+# Run tests
+make run_tests
+```

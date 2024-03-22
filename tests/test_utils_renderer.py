@@ -5,7 +5,6 @@ def test_text_notification():
     notification = render_notification(
         provider="test_provider",
         repo="test_repo",
-        release_name="test_release_name",
         tag_name="test_tag_name",
         type="txt",
     )
@@ -17,7 +16,6 @@ def test_html_notification():
     notification = render_notification(
         provider="test_provider",
         repo="test_repo",
-        release_name="test_release_name",
         tag_name="test_tag_name",
         type="html",
     )
@@ -29,7 +27,6 @@ def test_md_notification():
     notification = render_notification(
         provider="test_provider",
         repo="test_repo",
-        release_name="test_release_name",
         tag_name="test_tag_name",
         type="md",
     )
@@ -42,7 +39,6 @@ def test_failed_notification():
         render_notification(
             provider="test_provider",
             repo="test_repo",
-            release_name="test_release_name",
             tag_name="test_tag_name",
             type="fail",
         )

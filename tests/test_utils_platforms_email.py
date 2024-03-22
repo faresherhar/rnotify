@@ -2,13 +2,16 @@ from utils.platforms.email import send_email
 
 from smtplib import SMTP
 
+
 def test_send_email_success(smtpd):
     from_addr = "from.addr@example.org"
     to_addrs = "to.addr@example.org"
-    msg = (f"From: {from_addr}\r\n"
-            f"To: {to_addrs}\r\n"
-            f"Subject: Foo\r\n\r\n"
-            f"Foo bar")
+    msg = (
+        f"From: {from_addr}\r\n"
+        f"To: {to_addrs}\r\n"
+        f"Subject: Foo\r\n\r\n"
+        f"Foo bar"
+    )
 
     with SMTP(smtpd.hostname, smtpd.port) as client:
         client.sendmail(from_addr, to_addrs, msg)

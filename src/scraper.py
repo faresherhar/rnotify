@@ -1,10 +1,9 @@
 from yaml import safe_load
 import logging
 
-from utils.validator.repos import validate_repos
-from utils.exc import EmptyReposFileError
-import utils.logging_config
+from utils.validator.providers import validate_providers
 from database import SessionLocal, engine
+import utils.logging_config
 from config import settings
 
 from utils.providers.github import get_github_latest_release
@@ -32,24 +31,19 @@ if __name__ == "__main__":
     logger.info("Initiating tables creation")
     Repo.metadata.create_all(bind=engine)
 
-    # Load repos configuration
-    with open(settings.REPOS_FILE, "r") as file:
+    # Load providers configuration
+    with open(settings.PROVIDERS_FILE, "r") as file:
         # Read repos configuration file
         logger.info("Loading repositories file")
         config_dict = safe_load(file)
 
-        # Verify empty repos configuration file
-        if config_dict is None:
-            logger.error(EmptyReposFileError())
-            raise EmptyReposFileError
-
-        # Validate repos configuration file
-        repos_validation, err = validate_repos(config_dict=config_dict)
+        # Validate providers configuration file
+        repos_validation, err = validate_providers(config_dict=config_dict)
         if err:
             logger.error("Unable to load repositories file")
             raise err
 
-    # Fetch repos data
+    # Fetch providers data
     logger.info("Fetching repositories data")
     for provider in config_dict.keys():
         if provider == "github":

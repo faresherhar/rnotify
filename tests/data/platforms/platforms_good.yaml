@@ -1,0 +1,42 @@
+# Example 
+email:
+    receiver_email: some.user@gmail.com
+    smtp_server: smtp.gmail.com
+    user_email: user@gmail.com
+    user_password: passwd
+    port: 465
+    message_type: html
+
+---
+# Example 
+slack:
+  bot_token: xoxb-4474127070981-4485058222739-pTbViSeQOHZ5aNwcwc3uyhGM
+  channel_id: general
+  message_type: txt
+
+---
+# Example 
+telegram:
+  bot_token: 7153025398:AAFVb2GxsVTxpyJKKzgJHsPgCfi0lgIxIWE
+  chat_id: 6822985806
+  message_type: txt
+
+---
+# Example 
+email:
+    receiver_email: some.user@gmail.com
+    smtp_server: smtp.gmail.com
+    user_email: user@gmail.com
+    user_password: passwd
+    port: 465
+    message_type: txt
+
+slack:
+  bot_token: xoxb-4474127070981-4485058222739-pTbViSeQOHZ5aNwcwc3uyhGM
+  channel_id: general
+  message_type: md
+
+telegram:
+  bot_token: 7153025398:AAFVb2GxsVTxpyJKKzgJHsPgCfi0lgIxIWE
+  chat_id: 6822985806
+  message_type: txt

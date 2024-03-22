@@ -1,11 +1,6 @@
 from schema import Schema, SchemaError, Regex, Optional
-import logging
 
-import utils.logging_config as logging_config
-
-
-# Define logger
-logger = logging.getLogger(__name__)
+from utils.exc import EmptyReposFileError
 
 config_schema = Schema(
     {
@@ -15,10 +10,14 @@ config_schema = Schema(
 )
 
 
-def validate_repos(
+def validate_providers(
     config_dict: dict[str, list[str]]
 ) -> tuple[bool, SchemaError | None]:
-    logger.info(f"Checking repositories configuration {config_dict}")
+    # Verify empty repos configuration file
+    if config_dict is None:
+        return False, EmptyReposFileError
+
+    # Validate Schema
     try:
         config_schema.validate(config_dict)
         return True, None

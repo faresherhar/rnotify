@@ -1,0 +1,18 @@
+# Example 
+github:
+  - grafana/grafana
+  - derailed/k9s
+
+---
+# Example 
+gitlab:
+  - AuroraOSS/AuroraStore
+
+---
+# Example 
+github:
+  - grafana/grafana
+  - derailed/k9s
+
+gitlab:
+  - AuroraOSS/AuroraStore
