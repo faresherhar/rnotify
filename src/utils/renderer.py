@@ -13,8 +13,6 @@ def generate_release_url(provider: str, repo: str, tag_name: str) -> str | None:
     if provider == "gitlab":
         return settings.GITLAB_RELEASE.format(repo=repo, tag_name=tag_name)
 
-    return None
-
 
 def render_notification(
     provider: str, repo: str, release_name: str, tag_name: str, type: str = "txt"

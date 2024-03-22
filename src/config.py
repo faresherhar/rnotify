@@ -13,5 +13,9 @@ class Settings(BaseSettings):
     GITLAB_API: str = "https://gitlab.com/api/v4/projects/"
     GITLAB_RELEASE: str = "https://gitlab.com/{repo}/-/releases/{tag_name}"
 
+    TELEGRAM_API: str = (
+        "https://api.telegram.org/bot{bot_token}/sendMessage?chat_id={chat_id}&text={message_body}"
+    )
+
 
 settings = Settings()

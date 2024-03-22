@@ -1,2 +1,8 @@
-black
-pytest
+# Linting
+black==24.3.0
+
+# Tests
+pytest==8.1.1
+pytest-mock==3.12.0
+requests-mock==1.11.0
+smtpdfix==0.5.1

@@ -1,13 +1,20 @@
+import logging
 from slack_sdk import WebClient
 from slack_sdk.errors import SlackApiError
 
+import utils.logging_config as logging_config
 
-def send_slack_message(message: str, channel_id: str, bot_token: str):
+
+# Define logger
+logger = logging.getLogger(__name__)
+
+
+def send_slack_message(
+    bot_token: str, channel_id: str, message_body: str
+) -> tuple[bool, SlackApiError | None]:
     client = WebClient(token=bot_token)
     try:
-        response = client.chat_postMessage(channel=channel_id, text=message)
-        assert response["message"]["text"] == message
-    except SlackApiError as e:
-        print(
-            f"Slack Error {e.response['error']}, status_code {e.response.status_code}"
-        )
+        client.chat_postMessage(channel=channel_id, text=message_body)
+        return True, None
+    except SlackApiError as err:
+        return False, err

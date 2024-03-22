@@ -18,7 +18,7 @@ Repo.metadata.create_all(bind=engine)
 # add_release
 def test_add_release_github():
     try:
-        with open("samples/release/github_release_body.json") as file:
+        with open("./tests/data/release/github_release_body.json") as file:
             release_body = json.load(file)
             add_release(
                 provider="github",
@@ -34,7 +34,7 @@ def test_add_release_github():
 
 def test_add_release_gitlab():
     try:
-        with open("samples/release/gitlab_release_body.json") as file:
+        with open("./tests/data/release/gitlab_release_body.json") as file:
             release_body = json.load(file)
             add_release(
                 provider="gitlab",
