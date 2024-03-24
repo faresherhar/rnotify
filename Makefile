@@ -15,9 +15,6 @@ run_notifier:
 run_cleaner:
 	@python src/cleaner.py
 
-run_asgi:
-	@hypercorn --reload --bind 0.0.0.0:8000 src/asgi:app
-
 run_tests:
 	@pytest
 	@rm test.db

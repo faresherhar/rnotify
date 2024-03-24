@@ -12,7 +12,7 @@ class Repo(Base):
     provider = Column(String(255), nullable=False, primary_key=True)
     repo_name = Column(String(255), nullable=False, primary_key=True)
     tag_name = Column(String(255), nullable=False, primary_key=True)
-    notified = Column(Boolean, nullable=False)
+    notified = Column(Boolean, nullable=False, primary_key=True)
 
     def as_dict(self):
         return {

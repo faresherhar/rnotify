@@ -75,7 +75,7 @@ EOF
 touch sqlite.db
 ```
 
-### DataBase
+### Database
 
 For development we're using `SQLite DB`. If you want to use another RDBMS, please update the `RNOTIFY_DATABASE_URI` in the enviroment variable, and reload the new values `set -a && source .env && set +a`.
 
