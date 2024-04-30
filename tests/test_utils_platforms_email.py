@@ -1,6 +1,6 @@
-from utils.platforms.email import send_email
-
 from smtplib import SMTP
+
+from utils.platforms.email import send_email
 
 
 def test_send_email_success(smtpd):

@@ -18,10 +18,8 @@ from utils.platforms.email import send_email
 def get_db_session():
     db_session = SessionLocal()
     try:
-        logger.info("Establishing database connection")
         return db_session
     except:
-        logger.error("Unable to connect to database")
         db_session.close()
 
 
@@ -62,15 +60,16 @@ if __name__ == "__main__":
                     tag_name=repo.tag_name,
                     type=config_dict[platform]["message_type"],
                 )
-                send_email(
-                    receiver_email=config_dict[platform]["receiver_email"],
-                    message_body=message_body,
-                    subject="Release Notification",
-                    smtp_server=config_dict[platform]["smtp_server"],
-                    user_email=config_dict[platform]["user_email"],
-                    user_password=config_dict[platform]["user_password"],
-                    port=config_dict[platform]["port"],
-                )
+                if message_body:
+                    send_email(
+                        receiver_email=config_dict[platform]["receiver_email"],
+                        message_body=message_body,
+                        subject="Release Notification",
+                        smtp_server=config_dict[platform]["smtp_server"],
+                        user_email=config_dict[platform]["user_email"],
+                        user_password=config_dict[platform]["user_password"],
+                        port=config_dict[platform]["port"],
+                    )
 
         if platform == "slack":
             logger.info("Sending slack notifications...")
@@ -81,11 +80,12 @@ if __name__ == "__main__":
                     tag_name=repo.tag_name,
                     type=config_dict[platform]["message_type"],
                 )
-                send_slack_message(
-                    bot_token=config_dict[platform]["bot_token"],
-                    channel_id=config_dict[platform]["channel_id"],
-                    message_body=message_body,
-                )
+                if message_body:
+                    send_slack_message(
+                        bot_token=config_dict[platform]["bot_token"],
+                        channel_id=config_dict[platform]["channel_id"],
+                        message_body=message_body,
+                    )
 
         if platform == "telegram":
             logger.info("Sending telegram notifications...")
@@ -96,11 +96,12 @@ if __name__ == "__main__":
                     tag_name=repo.tag_name,
                     type=config_dict[platform]["message_type"],
                 )
-                send_telegram_message(
-                    bot_token=config_dict[platform]["bot_token"],
-                    chat_id=config_dict[platform]["chat_id"],
-                    message_body=message_body,
-                )
+                if message_body:
+                    send_telegram_message(
+                        bot_token=config_dict[platform]["bot_token"],
+                        chat_id=config_dict[platform]["chat_id"],
+                        message_body=message_body,
+                    )
 
     # Flag repos for future deletion
     logger.info("Flagging notified releases")

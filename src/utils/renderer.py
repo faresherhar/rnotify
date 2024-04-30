@@ -1,6 +1,12 @@
 from jinja2 import Environment, FileSystemLoader
+import logging
 
+import utils.logging_config
 from config import settings
+
+
+# Define logger
+logger = logging.getLogger(__name__)
 
 
 SUPPORTED_TYPES = ["html", "txt", "md"]
@@ -18,6 +24,7 @@ def render_notification(
     provider: str, repo: str, tag_name: str, type: str = "txt"
 ) -> str | None:
     if not is_suppotred_type(type):
+        logger.warning(f"Message type {type} not found")
         return None
 
     environment = Environment(loader=FileSystemLoader(settings.NOTIFICATION_TEMPLATES))

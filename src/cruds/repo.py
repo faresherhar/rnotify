@@ -104,4 +104,4 @@ def delete_notified_release(db_session: Session) -> None:
         logger.info(f"Deleting notified releases")
 
     except SQLAlchemyError:
-        logger.error(f"Unable to delete releases")
+        logger.error(f"Unable to delete notified releases")

@@ -1,17 +1,17 @@
-# Example 
+# Must be under a dictionary
 - grafana/grafana
 - derailed/k9s
 
 ---
-# Example 
 github:
 - grafana/grafana
 - derailed/k9s
 
 gitlab:
-
+# Missing list of repositories
 ---
-# Example 
 github:
+# Missing list of repositories
 
 gitlab:
+# Missing list of repositories

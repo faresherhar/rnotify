@@ -2,6 +2,7 @@ from schema import Schema, SchemaError, Regex, Optional, Or
 
 from utils.exc import EmptyReposFileError
 
+
 config_schema = Schema(
     {
         Optional("email"): {
