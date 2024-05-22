@@ -1,12 +1,5 @@
-import logging
 from slack_sdk import WebClient
 from slack_sdk.errors import SlackApiError
-
-import utils.logging_config as logging_config
-
-
-# Define logger
-logger = logging.getLogger(__name__)
 
 
 def send_slack_message(

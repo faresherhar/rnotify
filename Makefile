@@ -1,45 +1,38 @@
-# Docker images
+# Docker
 ARTIFACTORY_URL="localhost"
 
-SRC_IMAGE_NAME="username/rnotify-app"
-SRC_IMAGE_TAG="v0.0.1"
-SRC_IMAGE=${ARTIFACTORY_URL}/${SRC_IMAGE_NAME}:${SRC_IMAGE_TAG}
+IMAGE_NAME="username/rnotify-app"
+IMAGE_TAG="v0.0.1"
+IMAGE=${ARTIFACTORY_URL}/${IMAGE_NAME}:${IMAGE_TAG}
 
-DASHBOARD_IMAGE_NAME="username/rnotify-dashboard"
-DASHBOARD_IMAGE_TAG="v0.0.1"
-DASHBOARD_IMAGE=${ARTIFACTORY_URL}/${DASHBOARD_IMAGE_NAME}:${DASHBOARD_IMAGE_TAG}
-
-## Rnotify App Image
 .PHONY: build_src
 build_src:
-	@docker build --tag ${SRC_IMAGE} --file docker/src/Dockerfile ./
+	@docker build --tag ${IMAGE} --file Dockerfile ./
 
 .PHONY: publish_src
 publish_src: build_src
-	@docker push ${SRC_IMAGE}
+	@docker push ${IMAGE}
 
-## Rnotify Dashboard Image
-.PHONY: build_dashboard
-build_dashboard:
-	@docker build --tag ${DASHBOARD_IMAGE} --file docker/dashboard/Dockerfile ./
-
-.PHONY: publish_dashboard
-publish_dashboard: build_dashboard
-	@docker push ${DASHBOARD_IMAGE}
-
+.PHONY: run_src
+run_src:
+	@docker run --rm -ti ${IMAGE} /bin/sh
 
 # Run commands
+.PHONY: init_db
+init_db:
+	@python src/init_db.py
+
 .PHONY: run_scraper
 run_scraper:
-	@python src/scraper.py
+	@python src/main.py scrap
 
 .PHONY: run_notifier
 run_notifier:
-	@python src/notifier.py
+	@python src/main.py notify
 
-.PHONY: run_cleaner
-run_cleaner:
-	@python src/cleaner.py
+.PHONY: run_asgi
+run_asgi:
+	@uvicorn --reload --app-dir ${PWD}/src/ asgi:app --host 0.0.0.0 --port 8080
 
 .PHONY: run_tests
 run_tests:
@@ -54,4 +47,4 @@ setup:
 .PHONY: clean
 clean:
 	@find -name '*__pycache__' | xargs rm -rf
-	@rm -rf .env *.db .config/ .pytest_cache/ .venv/
+	# @rm -rf .env *.db .config/ .pytest_cache/ .venv/

@@ -1,13 +1,6 @@
-import logging
 import smtplib, ssl
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-
-import utils.logging_config as logging_config
-
-
-# Define logger
-logger = logging.getLogger(__name__)
 
 
 def send_email(

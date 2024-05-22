@@ -1,0 +1,4 @@
+**Rnotify**
+***New Release Notification***
+
+The {{ provider }} repository '{{ owner }}/{{ repo }}' got a new release '{{ tag }}'.

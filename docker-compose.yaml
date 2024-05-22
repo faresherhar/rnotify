@@ -1,0 +1,32 @@
+version: 3.7
+services:
+  rnotify:
+    image: 'localhost/username/rnotify-app:v0.0.1'
+    container_name: rnotify
+    ports:
+      - '8080:8080'
+    command: 'uvicorn asgi:app --host 0.0.0.0 --port 8080'
+    restart: always
+    environment:
+      - 'RNOTIFY_DATABASE_URI=postgresql://user:passwd@rnotify-db:5432/rnotify'
+      - RNOTIFY_NOTIFICATION_TEMPLATES=/etc/rnotify/templates/
+    volumes:
+      - './templates/:/etc/rnotify/templates/'
+    depends_on:
+      - rnotify-db
+
+  rnotify-db:
+    container_name: postgresql
+    image: 'docker.io/postgres:latest'
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: passwd
+      POSTGRES_DB: rnotify
+    volumes:
+      - 'postgres-data:/var/lib/postgresql/data'
+    ports:
+      - '5432:5432'
+    restart: always
+
+volumes:
+  postgres-data: null

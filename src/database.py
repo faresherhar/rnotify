@@ -1,19 +1,17 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy.exc import SQLAlchemyError
-import logging
 
 from config import settings
-import utils.logging_config as logging_config
 
 
-# Define logger
-logger = logging.getLogger(__name__)
+# Create DB session
+def get_db_session():
+    db_session = SessionLocal()
+    try:
+        return db_session
+    except:
+        db_session.close()
 
-# Connect to DBMS
-try:
-    engine = create_engine(settings.DATABASE_URI)
-    SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-except SQLAlchemyError as err:
-    logger.error(f"Unable to connect to database")
-    raise err
+
+engine = create_engine(settings.DATABASE_URI)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
