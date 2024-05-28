@@ -1,9 +1,6 @@
 from sqlalchemy import Column, String
-from sqlalchemy.orm import DeclarativeBase
 
-
-class Base(DeclarativeBase):
-    ...
+from models.base import Base
 
 
 class Repo(Base):

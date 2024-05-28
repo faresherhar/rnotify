@@ -1,4 +1,4 @@
-from sqlalchemy.exc import IntegrityError, SQLAlchemyError
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from models.release import Release
@@ -20,8 +20,8 @@ def get_release(provider: str, owner: str, repo: str, tag: str, db_session: Sess
     return db_session.query(Release).filter(Release.provider == provider, Release.owner == owner, Release.repo == repo, Release.tag == tag).one_or_none()
 
 
-def add_release(provider: str, owner: str, repo: str, tag: str, changelog: str, db_session: Session) -> None:
-    db_session.add(Release(provider=provider, owner=owner, repo=repo, tag=tag, changelog=changelog, notified=False))
+def add_release(provider: str, owner: str, repo: str, tag: str, db_session: Session) -> None:
+    db_session.add(Release(provider=provider, owner=owner, repo=repo, tag=tag, notified=False))
 
     try:
         db_session.commit()

@@ -13,5 +13,6 @@ def get_db_session():
         db_session.close()
 
 
-engine = create_engine(settings.DATABASE_URI)
+# Connect to DB
+engine = create_engine(settings.DATABASE_URI, echo=True)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)

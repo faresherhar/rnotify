@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, status, Depends
 
 from database import get_db_session
 from cruds.release import (

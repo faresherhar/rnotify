@@ -1,9 +1,6 @@
-from sqlalchemy import Column, String, Boolean, Text
-from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy import Column, String, Boolean
 
-
-class Base(DeclarativeBase):
-    ...
+from models.base import Base
 
 
 class Release(Base):
@@ -13,9 +10,8 @@ class Release(Base):
     owner = Column(String, nullable=False, primary_key=True)
     repo = Column(String, nullable=False, primary_key=True)
     tag = Column(String, nullable=False, primary_key=True)
-    changelog = Column(Text, nullable=False)
     notified = Column(Boolean, nullable=False)
 
 
     def as_dict(self):
-        return {"provider": self.provider, "owner": self.owner, "repo": self.repo, "tag": self.tag, "changelog": self.changelog, "notified": self.notified}
+        return {"provider": self.provider, "owner": self.owner, "repo": self.repo, "tag": self.tag, "notified": self.notified}

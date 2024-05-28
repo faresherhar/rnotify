@@ -1,16 +1,17 @@
 from fastapi import FastAPI
+import logging
 
-from database import engine
-from models.release import Release
-from models.repo import Repo
+import logging_config
 from routers import release
 from routers import repo
 
 
+# Define logger
+logger = logging.getLogger(__name__)
+
+# Define API
 app = FastAPI()
 
+# Connect routers
 app.include_router(release.router)
 app.include_router(repo.router)
-
-Release.metadata.create_all(bind=engine)
-Repo.metadata.create_all(bind=engine)

@@ -1,4 +1,4 @@
-from sqlalchemy.exc import IntegrityError, SQLAlchemyError
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from models.repo import Repo
