@@ -1,4 +1,4 @@
-FROM docker.io/python:3.12.3-alpine3.19@sha256:ef097620baf1272e38264207003b0982285da3236a20ed829bf6bbf1e85fe3cb
+FROM docker.io/python:3.12.3-alpine3.19
 
 EXPOSE 8080
 

@@ -7,15 +7,15 @@ IMAGE=${ARTIFACTORY_URL}/${IMAGE_NAME}:${IMAGE_TAG}
 
 .PHONY: build_src
 build_src:
-	@docker build --tag ${IMAGE} --file Dockerfile ./
+	@podman build --tag ${IMAGE} --file Dockerfile ./
 
 .PHONY: publish_src
 publish_src: build_src
-	@docker push ${IMAGE}
+	@podman push ${IMAGE}
 
-.PHONY: run_src
-run_src:
-	@docker run --rm -ti ${IMAGE} /bin/sh
+.PHONY: debug_src
+debug_src:
+	@podman run --rm -ti ${IMAGE} /bin/sh
 
 # Run commands
 .PHONY: init_db
