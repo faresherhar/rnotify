@@ -29,5 +29,5 @@ def add_repo(provider: str, owner: str, repo: str, db_session: Session) -> None:
 def delete_repo(provider: str, owner: str, repo: str, db_session: Session) -> None:
     effected_rows = db_session.query(Repo).filter(Repo.provider == provider, Repo.owner == owner, Repo.repo == repo).delete()
 
-    if effected_rows > 0:
+    if effected_rows != 0:
         db_session.commit()

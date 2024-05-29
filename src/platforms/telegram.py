@@ -8,6 +8,6 @@ from config import notifier_settings
 logger = logging.getLogger(__name__)
 
 
-def send_telegram_message(bot_token: str, chat_id: int, message_body: str) -> Request:
-    params = {"chat_id": chat_id, "text": message_body}
+def send_telegram_message(bot_token: str, chat_id: int, message: str) -> Request:
+    params = {"chat_id": chat_id, "text": message}
     return get(notifier_settings.TELEGRAM_API + f"bot{bot_token}/sendMessage", params=params)

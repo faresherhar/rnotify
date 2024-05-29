@@ -19,6 +19,11 @@ class NotifierSettings(BaseSettings):
     NOTIFICATION_TEMPLATES: str = Field(validation_alias="RNOTIFY_NOTIFICATION_TEMPLATES")
     NOTIFICATION_TEMPLATES_TYPES: list[str] = ["txt", "md"]
 
+    # What service to use to send notifications
+    # Multiple methods can be chosen.
+    # email, slack, telegram
+    NOTIFICATION_METHODS: str = Field(validation_alias="RNOTIFY_NOTIFICATION_METHODS")
+
     # Telegram configuration.
     TELEGRAM_API: str = "https://api.telegram.org/"
     TELEGRAM_BOT_TOKEN: str = Field(validation_alias="RNOTIFY_TELEGRAM_BOT_TOKEN", default="")

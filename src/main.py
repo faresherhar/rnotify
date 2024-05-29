@@ -2,9 +2,14 @@ import logging
 
 import logging_config
 from database import get_db_session
+from config import notifier_settings
+
+from utils import check_notification_configurations, send_notification
+
 from providers.github import get_github_latest_release
 from providers.gitlab import get_gitlab_latest_release
-from cruds.release import add_release
+
+from cruds.release import add_release, get_unnotified_releases, update_release_notification_status, delete_notified_release
 from cruds.repo import get_repos
 
 
@@ -25,8 +30,36 @@ def scrap():
                 add_release(provider=item['provider'], owner=item['owner'], repo=item['repo'], tag=release_body["tag_name"], db_session=get_db_session())
 
 
+def notify():
+    notification_methods = check_notification_configurations(notifier_settings.NOTIFICATION_METHODS.split(","))
+    if notification_methods == []:
+        logger.error("No nofication configurations found. Exiting...")
+        exit(0)
+    
+    logger.info(f"Following nofication configurations found {notification_methods}. Sending notifications...")
+
+    releases = [item.as_dict() for item in get_unnotified_releases(db_session=get_db_session())]
+    for item in releases:
+        send_notification(provider=item['provider'], owner=item['owner'], repo=item['repo'], tag=item["tag"], notification_methods=notification_methods)
+        update_release_notification_status(provider=item['provider'], owner=item['owner'], repo=item['repo'], tag=item["tag"], db_session=get_db_session())
+
+
+def clean():
+    delete_notified_release(db_session=get_db_session())
+
+
 if __name__ == "__main__":
+    import sys
+
+
     # Define logger
     logger = logging.getLogger(__name__)
-    
-    scrap()
+
+
+    if len(sys.argv) > 1:
+        if sys.argv[1] == "scrap":
+            scrap()
+        elif sys.argv[1] == "notify":
+            notify()
+        elif sys.argv[1] == "clean":
+            clean()

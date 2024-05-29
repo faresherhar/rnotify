@@ -29,8 +29,8 @@ def add_release(provider: str, owner: str, repo: str, tag: str, db_session: Sess
         pass
 
 
-def update_release_notification_status(provider: str, repo_name: str, tag: str, db_session: Session) -> None:
-    release = db_session.query(Release).filter(Release.provider == provider, Release.repo_name == repo_name, Release.tag == tag).one_or_none()
+def update_release_notification_status(provider: str, owner: str, repo: str, tag: str, db_session: Session) -> None:
+    release = db_session.query(Release).filter(Release.provider == provider, Release.owner == owner, Release.repo == repo, Release.tag == tag).one_or_none()
     
     if release:
         release.notified = True
@@ -40,5 +40,5 @@ def update_release_notification_status(provider: str, repo_name: str, tag: str, 
 def delete_notified_release(db_session: Session) -> None:
     effected_rows = db_session.query(Release).filter(Release.notified == True).delete()
     
-    if effected_rows == 0:
+    if effected_rows != 0:
         db_session.commit()
