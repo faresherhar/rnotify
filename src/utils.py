@@ -15,22 +15,6 @@ def render_notification_markdown(provider: str, owner: str, repo: str, tag: str)
     return template.render(provider=provider.title(), owner=owner, repo=repo, tag=tag)
 
 
-# Configuration checking
-def check_notification_configurations(notification_method: list[str]) -> list[str]:
-    return_methods = list()
-
-    for item in notification_method:
-        if item == "telegram":
-            if check_notification_configuration_telegram():
-                return_methods.append(item)
-
-    return return_methods
-
-
-def check_notification_configuration_telegram() -> bool:
-    return notifier_settings.TELEGRAM_BOT_TOKEN != "" or notifier_settings.TELEGRAM_CHAT_ID != 0
-
-
 # Send notification
 def send_notification(provider: str, owner: str, repo: str, tag: str, notification_methods: list[str]) -> None:
     for item in notification_methods:

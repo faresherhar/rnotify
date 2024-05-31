@@ -30,6 +30,10 @@ run_scraper:
 run_notifier:
 	@python src/main.py notify
 
+.PHONY: run_cleaner
+run_cleaner:
+	@python src/main.py clean
+
 .PHONY: run_asgi
 run_asgi:
 	@uvicorn --reload --app-dir ${PWD}/src/ asgi:app --host 0.0.0.0 --port 8080

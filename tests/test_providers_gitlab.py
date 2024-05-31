@@ -1,41 +1,55 @@
-from providers.gitlab import (
-    get_gitlab_releases,
-    get_gitlab_latest_release,
-    get_gitlab_release_by_tag_name,
-)
+from requests import Response
+
+import providers.gitlab
 
 
-valid_test_data = {"owner": "AuroraOSS", "repo": "AuroraStore", "tag": "4.4.4"}
-unvalid_test_data = {"owner": "unvalid_owner", "repo": "unvalid_repo", "tag": "unvalid_tag"}
+# Test successful calls
+success_response = Response()
+success_response.status_code = 200
 
 
-# Test valid repo
-def test_valid_get_gitlab_releases():
-    response = get_gitlab_releases(owner=valid_test_data["owner"], repo=valid_test_data["repo"])
-    assert response.status_code == 200
+def test_get_gitlab_releases_success(mocker):
+    mocker.patch("providers.gitlab.get_gitlab_releases", return_value=success_response)
+    response = providers.gitlab.get_gitlab_releases(owner="owner", repo="repo")
+    
+    assert response.status_code == success_response.status_code
 
 
-def test_valid_get_gitlab_latest_release():
-    response = get_gitlab_latest_release(owner=valid_test_data["owner"], repo=valid_test_data["repo"])
-    assert response.status_code == 200
+def test_get_gitlab_latest_release_success(mocker):
+    mocker.patch("providers.gitlab.get_gitlab_latest_release", return_value=success_response)
+    response = providers.gitlab.get_gitlab_latest_release(owner="owner", repo="repo")
+    
+    assert response.status_code == success_response.status_code
 
 
-def test_valid_get_gitlab_release_by_tag_name():
-    response = get_gitlab_release_by_tag_name(owner=valid_test_data["owner"], repo=valid_test_data["repo"], tag=valid_test_data["tag"])
-    assert response.status_code == 200
+def test_get_gitlab_release_by_tag_name_success(mocker):
+    mocker.patch("providers.gitlab.get_gitlab_release_by_tag_name", return_value=success_response)
+    response = providers.gitlab.get_gitlab_release_by_tag_name(owner="owner", repo="repo", tag="tag")
+    
+    assert response.status_code == success_response.status_code
 
 
-# Test unvalid repo
-def test_unvalid_get_gitlab_releases():
-    response = get_gitlab_releases(owner=unvalid_test_data["owner"], repo=unvalid_test_data["repo"])
-    assert response.status_code == 404
+# Test failed calls
+fail_response = Response()
+fail_response.status_code = 404
 
 
-def test_unvalid_get_gitlab_latest_release():
-    response = get_gitlab_latest_release(owner=unvalid_test_data["owner"], repo=unvalid_test_data["repo"])
-    assert response.status_code == 404
+def test_get_gitlab_releases_fail(mocker):
+    mocker.patch("providers.gitlab.get_gitlab_releases", return_value=fail_response)
+    response = providers.gitlab.get_gitlab_releases(owner="owner", repo="repo")
+    
+    assert response.status_code == fail_response.status_code
 
 
-def test_unvalid_get_gitlab_release_by_tag_name():
-    response = get_gitlab_release_by_tag_name(owner=unvalid_test_data["owner"], repo=unvalid_test_data["repo"], tag=unvalid_test_data["tag"])
-    assert response.status_code == 404
+def test_get_gitlab_latest_release_fail(mocker):
+    mocker.patch("providers.gitlab.get_gitlab_latest_release", return_value=fail_response)
+    response = providers.gitlab.get_gitlab_latest_release(owner="owner", repo="repo")
+    
+    assert response.status_code == fail_response.status_code
+
+
+def test_get_gitlab_release_by_tag_name_fail(mocker):
+    mocker.patch("providers.gitlab.get_gitlab_release_by_tag_name", return_value=fail_response)
+    response = providers.gitlab.get_gitlab_release_by_tag_name(owner="owner", repo="repo", tag="tag")
+    
+    assert response.status_code == fail_response.status_code

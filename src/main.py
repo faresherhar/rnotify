@@ -4,7 +4,7 @@ import logging_config
 from database import get_db_session
 from config import notifier_settings
 
-from utils import check_notification_configurations, send_notification
+from utils import send_notification
 
 from providers.github import get_github_latest_release
 from providers.gitlab import get_gitlab_latest_release
@@ -15,7 +15,9 @@ from cruds.repo import get_repos
 
 def scrap():
     repositories = [item.as_dict() for item in get_repos(db_session=get_db_session())]
-
+    if repositories == []:
+        exit(0)
+    
     for item in repositories:
         if item['provider'] == "github":
             response = get_github_latest_release(owner=item["owner"], repo=item["repo"])
@@ -31,13 +33,10 @@ def scrap():
 
 
 def notify():
-    notification_methods = check_notification_configurations(notifier_settings.NOTIFICATION_METHODS.split(","))
+    notification_methods = [item.strip() for item in notifier_settings.NOTIFICATION_METHODS.split(",")]
     if notification_methods == []:
-        logger.error("No nofication configurations found. Exiting...")
         exit(0)
     
-    logger.info(f"Following nofication configurations found {notification_methods}. Sending notifications...")
-
     releases = [item.as_dict() for item in get_unnotified_releases(db_session=get_db_session())]
     for item in releases:
         send_notification(provider=item['provider'], owner=item['owner'], repo=item['repo'], tag=item["tag"], notification_methods=notification_methods)
@@ -55,7 +54,8 @@ if __name__ == "__main__":
     # Define logger
     logger = logging.getLogger(__name__)
 
-
+    
+    # Define different commands
     if len(sys.argv) > 1:
         if sys.argv[1] == "scrap":
             scrap()
