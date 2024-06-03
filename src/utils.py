@@ -2,6 +2,7 @@ from jinja2 import Environment, FileSystemLoader
 
 from config import notifier_settings
 from platforms.telegram import send_telegram_message
+from platforms.slack import send_slack_message
 
 
 # Notification message rendering
@@ -21,3 +22,6 @@ def send_notification(provider: str, owner: str, repo: str, tag: str, notificati
         if item == "telegram":
             message = render_notification(provider=provider, owner=owner, repo=repo, tag=tag)
             send_telegram_message(bot_token=notifier_settings.TELEGRAM_BOT_TOKEN, chat_id=notifier_settings.TELEGRAM_CHAT_ID, message=message)
+        elif item == "slack":
+            message = render_notification(provider=provider, owner=owner, repo=repo, tag=tag)
+            send_slack_message(webhook_token=notifier_settings.SLACK_WEBHOOK_TOKEN, message=message)

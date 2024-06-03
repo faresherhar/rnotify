@@ -33,6 +33,9 @@ class NotifierSettings(BaseSettings):
     TELEGRAM_BOT_TOKEN: str = Field(validation_alias="RNOTIFY_TELEGRAM_BOT_TOKEN", default="")
     TELEGRAM_CHAT_ID: int = Field(validation_alias="RNOTIFY_TELEGRAM_CHAT_ID", default=0)
 
+    # Slack configuration
+    SLACK_WEBHOOK_API: str = "https://hooks.slack.com/services/"
+    SLACK_WEBHOOK_TOKEN: str = Field(validation_alias="RNOTIFY_SLACK_WEBHOOK_TOKEN", default="")
 
 settings = Settings()
 scraper_settings = ScraperSettings()
