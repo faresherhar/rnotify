@@ -9,9 +9,13 @@ class Settings(BaseSettings):
 
 
 class ScraperSettings(BaseSettings):
-    # Github, Gitlab, APIs
+    # Github API, Github API Token
     GITHUB_API: str = "https://api.github.com/repos/"
+    GITHUB_API_TOKEN: str = Field(validation_alias="RNOTIFY_GITHUB_API_TOKEN", default="")
+
+    # Gitlab API, Gitlab API Token
     GITLAB_API: str = "https://gitlab.com/api/v4/projects/"
+    GITLAB_API_TOKEN: str = Field(validation_alias="RNOTIFY_GITLAB_API_TOKEN", default="")
 
 
 class NotifierSettings(BaseSettings):

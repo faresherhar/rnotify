@@ -10,7 +10,7 @@ WORKDIR /home/rnotify
 RUN adduser --disabled-password rnotify && \
     chown rnotify /home/rnotify
 
-# Copy code & templates
+# Copy code
 COPY ./requirements/common.txt ./requirements.txt
 COPY ./src ./
 

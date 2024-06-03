@@ -101,8 +101,6 @@ if __name__ == "__main__":
     Base.metadata.create_all(bind=engine)
 
     repo_data = [
-        {"provider": "github", "owner": "grafana", "repo": "grafana"},
-        {"provider": "github", "owner": "prometheus", "repo": "prometheus"},
         {"provider": "github", "owner": "derailed", "repo": "k9s"},
         {"provider": "gitlab", "owner": "AuroraOSS", "repo": "AuroraStore"},
     ]
