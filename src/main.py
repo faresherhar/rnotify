@@ -2,7 +2,7 @@ import logging
 
 import logging_config
 from database import get_db_session
-from config import notifier_settings
+from config import settings
 
 from utils import send_notification
 
@@ -33,7 +33,7 @@ def scrap():
 
 
 def notify():
-    notification_methods = [item.strip() for item in notifier_settings.NOTIFICATION_METHODS.split(",")]
+    notification_methods = [item.strip() for item in settings.NOTIFICATION_METHODS.split(",")]
     if notification_methods == []:
         exit(0)
     

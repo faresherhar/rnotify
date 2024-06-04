@@ -7,8 +7,6 @@ class Settings(BaseSettings):
     # Database URI. Check our RDBMS documentation.
     DATABASE_URI: str = Field(validation_alias="RNOTIFY_DATABASE_URI")
 
-
-class ScraperSettings(BaseSettings):
     # Github API, Github API Token
     GITHUB_API: str = "https://api.github.com/repos/"
     GITHUB_API_TOKEN: str = Field(validation_alias="RNOTIFY_GITHUB_API_TOKEN", default="")
@@ -17,16 +15,14 @@ class ScraperSettings(BaseSettings):
     GITLAB_API: str = "https://gitlab.com/api/v4/projects/"
     GITLAB_API_TOKEN: str = Field(validation_alias="RNOTIFY_GITLAB_API_TOKEN", default="")
 
-
-class NotifierSettings(BaseSettings):
     # Notifications templates.
-    NOTIFICATION_TEMPLATES: str = Field(validation_alias="RNOTIFY_NOTIFICATION_TEMPLATES")
+    NOTIFICATION_TEMPLATES: str = Field(validation_alias="RNOTIFY_NOTIFICATION_TEMPLATES", default="")
     NOTIFICATION_TEMPLATES_TYPES: list[str] = ["txt", "md"]
 
     # What service to use to send notifications
     # Multiple methods can be chosen using a list[str].
     # email, slack, telegram
-    NOTIFICATION_METHODS: str = Field(validation_alias="RNOTIFY_NOTIFICATION_METHODS", default=[])
+    NOTIFICATION_METHODS: str = Field(validation_alias="RNOTIFY_NOTIFICATION_METHODS", default="")
 
     # Telegram configuration.
     TELEGRAM_API: str = "https://api.telegram.org/"
@@ -37,6 +33,5 @@ class NotifierSettings(BaseSettings):
     SLACK_WEBHOOK_API: str = "https://hooks.slack.com/services/"
     SLACK_WEBHOOK_TOKEN: str = Field(validation_alias="RNOTIFY_SLACK_WEBHOOK_TOKEN", default="")
 
+
 settings = Settings()
-scraper_settings = ScraperSettings()
-notifier_settings = NotifierSettings()
