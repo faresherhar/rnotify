@@ -17,7 +17,6 @@ class Settings(BaseSettings):
 
     # Notifications templates.
     NOTIFICATION_TEMPLATES: str = Field(validation_alias="RNOTIFY_NOTIFICATION_TEMPLATES", default="")
-    NOTIFICATION_TEMPLATES_TYPES: list[str] = ["txt", "md"]
 
     # What service to use to send notifications
     # Multiple methods can be chosen using a list[str].
@@ -27,7 +26,7 @@ class Settings(BaseSettings):
     # Telegram configuration.
     TELEGRAM_API: str = "https://api.telegram.org/"
     TELEGRAM_BOT_TOKEN: str = Field(validation_alias="RNOTIFY_TELEGRAM_BOT_TOKEN", default="")
-    TELEGRAM_CHAT_ID: int = Field(validation_alias="RNOTIFY_TELEGRAM_CHAT_ID", default=0)
+    TELEGRAM_CHAT_ID: str = Field(validation_alias="RNOTIFY_TELEGRAM_CHAT_ID", default="")
 
     # Slack configuration
     SLACK_WEBHOOK_API: str = "https://hooks.slack.com/services/"

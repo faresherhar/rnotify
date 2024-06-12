@@ -33,11 +33,14 @@ def scrap():
 
 
 def notify():
-    notification_methods = [item.strip() for item in settings.NOTIFICATION_METHODS.split(",")]
-    if notification_methods == []:
+    if settings.NOTIFICATION_METHODS == "":
         exit(0)
-    
+    elif settings.NOTIFICATION_TEMPLATES == "":
+        exit(0)
+
+    notification_methods = [item.strip() for item in settings.NOTIFICATION_METHODS.split(",")]
     releases = [item.as_dict() for item in get_unnotified_releases(db_session=get_db_session())]
+
     for item in releases:
         send_notification(provider=item['provider'], owner=item['owner'], repo=item['repo'], tag=item["tag"], notification_methods=notification_methods)
         update_release_notification_status(provider=item['provider'], owner=item['owner'], repo=item['repo'], tag=item["tag"], db_session=get_db_session())
@@ -54,7 +57,6 @@ if __name__ == "__main__":
     # Define logger
     logger = logging.getLogger(__name__)
 
-    
     # Define different commands
     if len(sys.argv) > 1:
         if sys.argv[1] == "scrap":

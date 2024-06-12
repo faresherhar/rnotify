@@ -8,6 +8,6 @@ from config import settings
 logger = logging.getLogger(__name__)
 
 
-def send_telegram_message(bot_token: str, chat_id: int, message: str) -> Response:
+def send_telegram_message(bot_token: str, chat_id: str, message: str) -> Response:
     params = {"chat_id": chat_id, "text": message}
     return get(settings.TELEGRAM_API + f"bot{bot_token}/sendMessage", params=params)
