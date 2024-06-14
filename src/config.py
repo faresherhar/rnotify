@@ -9,10 +9,12 @@ class Settings(BaseSettings):
 
     # Github API, Github API Token
     GITHUB_API: str = "https://api.github.com/repos/"
+    GITHUB_RELEASE_URL: str = "https://github.com/{owner}/{repo}/releases/tag/{tag}"
     GITHUB_API_TOKEN: str = Field(validation_alias="RNOTIFY_GITHUB_API_TOKEN", default="")
 
     # Gitlab API, Gitlab API Token
     GITLAB_API: str = "https://gitlab.com/api/v4/projects/"
+    GITLAB_RELEASE_URL: str = "https://gitlab.com/{owner}/{repo}/-/releases/{tag_name}"
     GITLAB_API_TOKEN: str = Field(validation_alias="RNOTIFY_GITLAB_API_TOKEN", default="")
 
     # Notifications templates.
