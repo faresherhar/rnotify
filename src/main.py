@@ -11,8 +11,8 @@ from platforms.telegram import send_telegram_message
 from platforms.slack import send_slack_message
 from cruds.release import add_release, get_unnotified_releases, update_release_notification_status, delete_notified_release
 from cruds.repo import get_repos
-from cruds.telegram import get_telegram_bots
-from cruds.slack import get_slack_webhooks
+from cruds.platform.telegram import get_telegram_bots
+from cruds.platform.slack import get_slack_webhooks
 
 # Scraping new releases
 def scrap():
@@ -61,7 +61,7 @@ def notify():
 
     for item in releases:
         send_notification(provider=item['provider'], owner=item['owner'], repo=item['repo'], tag=item["tag"], notification_methods=notification_methods, platforms_config=get_platforms_config())
-        # update_release_notification_status(provider=item['provider'], owner=item['owner'], repo=item['repo'], tag=item["tag"], db_session=get_db_session())
+        update_release_notification_status(provider=item['provider'], owner=item['owner'], repo=item['repo'], tag=item["tag"], db_session=get_db_session())
 
 
 def clean():

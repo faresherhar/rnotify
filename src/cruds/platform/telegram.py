@@ -1,7 +1,7 @@
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
-from models.telegram import Telegram
+from models.platform.telegram import Telegram
 
 
 def get_telegram_bots(db_session: Session) -> list[Telegram]:

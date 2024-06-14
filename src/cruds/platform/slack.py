@@ -1,7 +1,7 @@
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
-from models.slack import Slack
+from models.platform.slack import Slack
 
 
 def get_slack_webhooks(db_session: Session) -> list[Slack]:
