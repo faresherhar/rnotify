@@ -1,4 +1,5 @@
 from sqlalchemy import Column, String
+from pydantic import BaseModel
 
 from models.base import Base
 
@@ -12,3 +13,8 @@ class Telegram(Base):
 
     def as_dict(self):
         return {"bot_token": self.bot_token, "chat_id": self.chat_id}
+
+
+class TelegramSchema(BaseModel):
+    bot_token: str
+    chat_id: str
