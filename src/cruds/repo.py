@@ -13,7 +13,11 @@ def get_repos_by_provider(provider: str, db_session: Session) -> list[Repo]:
 
 
 def get_repos_by_owner(provider: str, owner: str, db_session: Session) -> list[Repo]:
-    return db_session.query(Repo).filter(Repo.provider == provider, Repo.owner == owner).all()
+    return (
+        db_session.query(Repo)
+        .filter(Repo.provider == provider, Repo.owner == owner)
+        .all()
+    )
 
 
 def add_repo(provider: str, owner: str, repo: str, db_session: Session) -> None:
@@ -27,7 +31,11 @@ def add_repo(provider: str, owner: str, repo: str, db_session: Session) -> None:
 
 
 def delete_repo(provider: str, owner: str, repo: str, db_session: Session) -> None:
-    effected_rows = db_session.query(Repo).filter(Repo.provider == provider, Repo.owner == owner, Repo.repo == repo).delete()
+    effected_rows = (
+        db_session.query(Repo)
+        .filter(Repo.provider == provider, Repo.owner == owner, Repo.repo == repo)
+        .delete()
+    )
 
     if effected_rows != 0:
         db_session.commit()

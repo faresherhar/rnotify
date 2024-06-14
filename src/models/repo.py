@@ -11,7 +11,6 @@ class Repo(Base):
     owner = Column(String, nullable=False, primary_key=True)
     repo = Column(String, nullable=False, primary_key=True)
 
-
     def as_dict(self):
         return {"provider": self.provider, "owner": self.owner, "repo": self.repo}
 
@@ -23,5 +22,5 @@ class RepoSchema(BaseModel):
 
 
 class ReposSchema(BaseModel):
-    github: list[str] | None = []
-    gitlab: list[str] | None = []
+    github: list[str] = []
+    gitlab: list[str] = []

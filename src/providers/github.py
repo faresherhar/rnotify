@@ -23,12 +23,20 @@ def get_github_headers() -> dict[str, str]:
 
 
 def get_github_releases(owner: str, repo: str) -> Response:
-    return get(settings.GITHUB_API + f"{owner}/{repo}/releases", headers=get_github_headers())
+    return get(
+        settings.GITHUB_API + f"{owner}/{repo}/releases", headers=get_github_headers()
+    )
 
 
-def get_github_latest_release(owner: str, repo: str, api_token: str="") -> Response:
-    return get(settings.GITHUB_API + f"{owner}/{repo}/releases/latest", headers=get_github_headers())
+def get_github_latest_release(owner: str, repo: str) -> Response:
+    return get(
+        settings.GITHUB_API + f"{owner}/{repo}/releases/latest",
+        headers=get_github_headers(),
+    )
 
 
 def get_github_release_by_tag_name(owner: str, repo: str, tag: str) -> Response:
-    return get(settings.GITHUB_API + f"{owner}/{repo}/releases/tags/{tag}", headers=get_github_headers())
+    return get(
+        settings.GITHUB_API + f"{owner}/{repo}/releases/tags/{tag}",
+        headers=get_github_headers(),
+    )

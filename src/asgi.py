@@ -9,7 +9,12 @@ from routers.platform import telegram, slack
 logger = logging.getLogger(__name__)
 
 # Define API
-app = FastAPI()
+app = FastAPI(
+    title="Rnotify API",
+    summary="A FastAPI for the Rnotify backend application.",
+    description="Rnotify, is a Python tool for tracking releases. By using it, you are notified of the latest release of your configured repositories. It uses the Github, and Gitlab APIs to scrape the data of the releases related to your repositories, and sends you a message to notify you of the latest release, by Email, Slack, Telegram... .",
+    version="1.0.0",
+)
 
 # Connect routers
 app.include_router(repo.router, prefix="/repos")

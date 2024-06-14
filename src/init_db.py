@@ -5,6 +5,5 @@ if __name__ == "__main__":
     from models.release import Release
     from models.platform.telegram import Telegram
     from models.platform.slack import Slack
-    
 
     Base.metadata.create_all(bind=engine)
