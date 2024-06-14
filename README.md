@@ -10,123 +10,102 @@
 
 > Up-to-date to the latest release of your favorite opensource tools.”
 
-RNOTIFY is a Python tool for tracking releases. By using it, you are notified of the latest release of your configured repositories. It uses the Github, and Gitlab APIs to scrape the data of the releases related to your repositories, and sends you a notification about it, by Email, Slack, Telegram...
+**Rnotify**, is a Python tool for tracking releases. By using it, you are notified of the latest release of your configured repositories. It uses the Github, and Gitlab APIs to scrape the data of the releases related to your repositories, and sends you a message to notify you of the latest release, by Email, Slack, Telegram... .
 
 For more details, installation instrucions, and configuration, please refer to the documentation below.
 
-## Installation
+## Code Overview
 
-### Helm
-
-### Docker Compose
-
-> Please make sure to build your image first.
-
-```sh
-# Build 'src/' directory for the rnotify app Docker image
-make build_src
-
-# Run docker-compose
-docker-compose up
+```bash
+.
+├── data                            # Example data
+│   └── release
+│       ├── github_release_body.json
+│       └── gitlab_release_body.json
+├── doc                             # Documentation files
+│   ├── CONTRIBUTING.md
+│   ├── DEPLOYMENT.md
+│   └── INSTALLATION.md
+├── helm                            # Helm Chart manifests
+│   ├── Chart.yaml
+│   ├── templates
+│   │   ├── configmap.yaml
+│   │   ├── _helpers.tpl
+│   │   └── rnotify.yaml
+│   └── values.yaml
+├── requirements                    # Requirements files
+│   ├── common.txt
+│   └── dev.txt
+├── src                             # Source Code
+│   ├── asgi.py                     # API App
+│   ├── config.py                   # Config files
+│   ├── cruds                       # Cruds for each model
+│   │   ├── __init__.py
+│   │   ├── platform
+│   │   │   ├── __init__.py
+│   │   │   ├── slack.py
+│   │   │   └── telegram.py
+│   │   ├── release.py
+│   │   └── repo.py
+│   ├── database.py                 # SQLAlchemy config
+│   ├── init_db.py                  # Create Tables
+│   ├── __init__.py
+│   ├── logging_config.py           # Logging config
+│   ├── main.py                     # Main functions
+│   ├── models                      # SQLAlchemy models
+│   │   ├── base.py
+│   │   ├── __init__.py
+│   │   ├── platform
+│   │   │   ├── __init__.py
+│   │   │   ├── slack.py
+│   │   │   └── telegram.py
+│   │   ├── release.py
+│   │   └── repo.py
+│   ├── platforms                   # Notification platforms
+│   │   ├── email.py
+│   │   ├── __init__.py
+│   │   ├── slack.py
+│   │   └── telegram.py
+│   ├── providers                   # Github, Gitlab API requests
+│   │   ├── github.py
+│   │   ├── gitlab.py
+│   │   └── __init__.py
+│   ├── routers                     # FastAPI routers
+│   │   ├── __init__.py
+│   │   ├── platform
+│   │   │   ├── __init__.py
+│   │   │   ├── slack.py
+│   │   │   └── telegram.py
+│   │   ├── release.py
+│   │   └── repo.py
+│   └── utils.py                    # Utility code
+├── templates                       # Notification message templaes
+│   ├── notification.md.j2
+│   └── notification.txt.j2
+├── tests                           # Tests
+│   ├── test_platforms_slack.py
+│   ├── test_platforms_telegram.py
+│   ├── test_providers_github.py
+│   ├── test_providers_gitlab.py
+│   └── test_utils.py
+├── README.md                       # README
+├── Makefile                        # Makefile
+├── pytest.ini                      # Pytest config
+├── .gitignore                      # Git ignore                             
+├── docker-compose.yaml             # Docker compose setup
+├── .dockerignore                   # Docker ignore                                 
+├── Dockerfile                      # Dockerfile
+└── .env.example                    # .env file example
 ```
 
-Open your browser, and go to <http://localhost:8080>.
+## API Reference
 
-## Contributing
+## Documentation
 
-### Setup Development Enviroment
+- [Contributing](./doc/CONTRIBUTING.md)
+- [Installation](./doc/INSTALLATION.md)
+- [Deployment](./doc/DEPLOYMENT.md)
 
-> Setup development enviroment
+## FAQ
 
-```sh
-# Create virtual enviroment
-python3 -m venv .venv/
-source .venv/bin/activate
-pip install --upgrade pip
-
-# Install dependencies
-make setup
-```
-
-> Setup enviroment variables
-
-```sh
-# Update the value if necessary
-cp .env.example .env
-
-# Load the enviroment variables
-# Execute it whenever you update the values
-set -a && source .env && set +a
-```
-
-> Database
-
-For development, we're using `SQLite DB`. If you want to use another RDBMS, please update the `RNOTIFY_DATABASE_URI` in the enviroment variables file `.env`, and reload the new values `set -a && source .env && set +a`.
-
-To explore the `SQLite DB`, we recommend using the [SQLite Browser](https://sqlitebrowser.org/).
-
-### Local development
-
-Each functionality is run seperatly, despite having the code within the same project.
-
-```sh
-# Init the Database
-make init_db
-
-# Lunch the API
-# Navigate to http://localhost:8080, to access it
-make run_asgi
-
-# Fetch data for new releases
-make run_scraper
-
-# Send notifications for the new releases
-make run_notifier
-```
-
-> Init Script
-
-Use the following code in `src/init_db.py`, if you want to auto fill the database with examples for the development.
-
-```python
-if __name__ == "__main__":
-    from database import engine, get_db_session
-
-    from cruds.repo import add_repo
-
-    from models.release import Release
-    from models.repo import Repo
-    from models.base import Base
-
-    Base.metadata.create_all(bind=engine)
-
-    repo_data = [
-        {"provider": "github", "owner": "derailed", "repo": "k9s"},
-        {"provider": "gitlab", "owner": "AuroraOSS", "repo": "AuroraStore"},
-    ]
-
-    for row in repo_data:
-        add_repo(**row, db_session=get_db_session())
-```
-
-### Run Tests
-
-```sh
-# Run tests
-make run_tests
-```
-
-### Docker Images
-
-> Please make sure to update the variables in the Makefile before building the image, and to login into your image artifactory before pushing it.
-
-```sh
-# Build 'src/' directory for the rnotify app Docker image
-make build_src
-
-# Push the rnotify app Docker image
-make push_src
-
-# Access the rnotify app Docker image
-make debug_src
-```
+## Features
