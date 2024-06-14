@@ -4,15 +4,17 @@ import logging_config
 from database import get_db_session
 from config import settings
 
-from utils import send_notification
-
+from utils import render_notification_message
 from providers.github import get_github_latest_release
 from providers.gitlab import get_gitlab_latest_release
-
+from platforms.telegram import send_telegram_message
+from platforms.slack import send_slack_message
 from cruds.release import add_release, get_unnotified_releases, update_release_notification_status, delete_notified_release
 from cruds.repo import get_repos
+from cruds.telegram import get_telegram_bots
+from cruds.slack import get_slack_webhooks
 
-
+# Scraping new releases
 def scrap():
     repositories = [item.as_dict() for item in get_repos(db_session=get_db_session())]
     if repositories == []:
@@ -32,6 +34,22 @@ def scrap():
                 add_release(provider=item['provider'], owner=item['owner'], repo=item['repo'], tag=release_body["tag_name"], db_session=get_db_session())
 
 
+# Notification Sending
+def get_platforms_config():
+    return {"telegram": get_telegram_bots(db_session=get_db_session())[0].as_dict(), "slack": get_slack_webhooks(db_session=get_db_session())[0].as_dict()}
+
+
+def send_notification(provider: str, owner: str, repo: str, tag: str, notification_methods: list[str], platforms_config: dict[str, dict[str, str]]) -> None:
+    for item in notification_methods:
+        message = render_notification_message(provider=provider, owner=owner, repo=repo, tag=tag)
+        if item == "telegram":
+            if platforms_config[item] != None:
+                send_telegram_message(bot_token=platforms_config[item]["bot_token"], chat_id=platforms_config[item]["chat_id"], message=message)
+        elif item == "slack":
+            if platforms_config[item] != None:
+                send_slack_message(webhook_token=platforms_config[item]["webhook_token"], message=message)
+
+
 def notify():
     if settings.NOTIFICATION_METHODS == "":
         exit(0)
@@ -42,8 +60,8 @@ def notify():
     releases = [item.as_dict() for item in get_unnotified_releases(db_session=get_db_session())]
 
     for item in releases:
-        send_notification(provider=item['provider'], owner=item['owner'], repo=item['repo'], tag=item["tag"], notification_methods=notification_methods)
-        update_release_notification_status(provider=item['provider'], owner=item['owner'], repo=item['repo'], tag=item["tag"], db_session=get_db_session())
+        send_notification(provider=item['provider'], owner=item['owner'], repo=item['repo'], tag=item["tag"], notification_methods=notification_methods, platforms_config=get_platforms_config())
+        # update_release_notification_status(provider=item['provider'], owner=item['owner'], repo=item['repo'], tag=item["tag"], db_session=get_db_session())
 
 
 def clean():

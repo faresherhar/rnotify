@@ -4,7 +4,7 @@ from pydantic_settings import BaseSettings
 
 #TODO: Add APIs documentation, and detail references
 class Settings(BaseSettings):
-    # Database URI. Check our RDBMS documentation.
+    # Database URI
     DATABASE_URI: str = Field(validation_alias="RNOTIFY_DATABASE_URI")
 
     # Github API, Github API Token
@@ -23,14 +23,9 @@ class Settings(BaseSettings):
     # email, slack, telegram
     NOTIFICATION_METHODS: str = Field(validation_alias="RNOTIFY_NOTIFICATION_METHODS", default="")
 
-    # Telegram configuration.
+    # Notification Platforms API
     TELEGRAM_API: str = "https://api.telegram.org/"
-    TELEGRAM_BOT_TOKEN: str = Field(validation_alias="RNOTIFY_TELEGRAM_BOT_TOKEN", default="")
-    TELEGRAM_CHAT_ID: str = Field(validation_alias="RNOTIFY_TELEGRAM_CHAT_ID", default="")
-
-    # Slack configuration
     SLACK_WEBHOOK_API: str = "https://hooks.slack.com/services/"
-    SLACK_WEBHOOK_TOKEN: str = Field(validation_alias="RNOTIFY_SLACK_WEBHOOK_TOKEN", default="")
 
 
 settings = Settings()
