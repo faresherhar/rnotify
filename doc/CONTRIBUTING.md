@@ -1,5 +1,125 @@
 # Contributing
 
+## Code Overview
+
+```bash
+.
+├── data                            # Example data
+│   └── release
+│       ├── github_release_body.json
+│       └── gitlab_release_body.json
+├── doc                             # Documentation files
+│   ├── CONTRIBUTING.md
+│   ├── DEPLOYMENT.md
+│   └── INSTALLATION.md
+├── helm                            # Helm Chart manifests
+│   ├── Chart.yaml
+│   ├── templates
+│   │   ├── configmap.yaml
+│   │   ├── _helpers.tpl
+│   │   └── rnotify.yaml
+│   └── values.yaml
+├── requirements                    # Requirements files
+│   ├── common.txt
+│   └── dev.txt
+├── src                             # Source Code
+│   ├── asgi.py                     # API App
+│   ├── config.py                   # Config files
+│   ├── cruds                       # Cruds for each model
+│   │   ├── __init__.py
+│   │   ├── platform
+│   │   │   ├── __init__.py
+│   │   │   ├── slack.py
+│   │   │   └── telegram.py
+│   │   ├── release.py
+│   │   └── repo.py
+│   ├── database.py                 # SQLAlchemy config
+│   ├── init_db.py                  # Create Tables
+│   ├── __init__.py
+│   ├── logging_config.py           # Logging config
+│   ├── main.py                     # Main functions
+│   ├── models                      # SQLAlchemy models
+│   │   ├── base.py
+│   │   ├── __init__.py
+│   │   ├── platform
+│   │   │   ├── __init__.py
+│   │   │   ├── slack.py
+│   │   │   └── telegram.py
+│   │   ├── release.py
+│   │   └── repo.py
+│   ├── platforms                   # Notification platforms
+│   │   ├── email.py
+│   │   ├── __init__.py
+│   │   ├── slack.py
+│   │   └── telegram.py
+│   ├── providers                   # Github, Gitlab API requests
+│   │   ├── github.py
+│   │   ├── gitlab.py
+│   │   └── __init__.py
+│   ├── routers                     # FastAPI routers
+│   │   ├── __init__.py
+│   │   ├── platform
+│   │   │   ├── __init__.py
+│   │   │   ├── slack.py
+│   │   │   └── telegram.py
+│   │   ├── release.py
+│   │   └── repo.py
+│   └── utils.py                    # Utility code
+├── templates                       # Notification message templaes
+│   ├── notification.md.j2
+│   └── notification.txt.j2
+├── tests                           # Tests
+│   ├── test_platforms_slack.py
+│   ├── test_platforms_telegram.py
+│   ├── test_providers_github.py
+│   ├── test_providers_gitlab.py
+│   └── test_utils.py
+├── README.md                       # README
+├── Makefile                        # Makefile
+├── pytest.ini                      # Pytest config
+├── .gitignore                      # Git ignore                             
+├── docker-compose.yaml             # Docker compose setup
+├── .dockerignore                   # Docker ignore                                 
+├── Dockerfile                      # Dockerfile
+└── .env.example                    # .env file example
+```
+
+## Environment Variables
+
+To run this project, you will need to add the following environment variables to your .env file
+
+### Common
+
+> `RNOTIFY_DATABASE_URI`
+ 
+Database URI (Mandatory Enviroment Variable). Check the supported SQLAlchemy dialects.
+
+### Scraper
+
+> `RNOTIFY_GITHUB_API_TOKEN`
+
+Github Authentication Token (Optional Enviroment Variable). When not provided, the code still works but with a limited number of queries per hour. 
+
+> `RNOTIFY_GITLAB_API_TOKEN`
+
+Gitlab Authentication Token (Optional Enviroment Variable). When not provided, the code still works but with a limited number of queries per hour.
+
+### Notifier
+
+> `RNOTIFY_NOTIFICATION_TEMPLATES`
+
+Notification Templates Directory (Mandatory Enviroment Variable). This variable points to the directory of the templates for the notifications.
+
+> `RNOTIFY_NOTIFICATION_METHODS`
+
+Notification Methods (Mandatory Enviroment Variable). A list of platfroms (separated by comma), to be used to send notifications. Please check our supported notification platforms.
+
+Examples:
+
+- "email"
+- "email,telegram"
+- "slack,telegram"
+
 ## Setup Development Enviroment
 
 > Setup development enviroment
@@ -75,7 +195,7 @@ if __name__ == "__main__":
         add_repo(**row, db_session=get_db_session())
 ```
 
-## Run Tests
+> Run Tests
 
 ```sh
 # Run tests

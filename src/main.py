@@ -24,6 +24,7 @@ from cruds.platform.slack import get_slack_webhooks
 def scrap():
     repositories = [item.as_dict() for item in get_repos(db_session=get_db_session())]
     if repositories == []:
+        logger.warning("No repositories found. Exiting...")
         exit(0)
 
     for item in repositories:
@@ -89,8 +90,10 @@ def send_notification(
 
 def notify():
     if settings.NOTIFICATION_METHODS == "":
+        logger.warning("Nottifications configuration not found. Exiting...")
         exit(0)
     elif settings.NOTIFICATION_TEMPLATES == "":
+        logger.warning("Nottifications templates not found. Exiting...")
         exit(0)
 
     notification_methods = [

@@ -29,7 +29,7 @@ def send_email(
     with smtplib.SMTP_SSL(smtp_server, port, context=context) as server:
         try:
             server.login(user_email, user_password)
-            server.sendmail(user_email, receiver_email, message.as_string())
+            server.sendmail(user_email, receiver_email, message)
             return True, None
         except Exception as err:
             return False, err
