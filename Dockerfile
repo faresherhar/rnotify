@@ -1,7 +1,5 @@
 FROM docker.io/python:3.12.3-alpine3.19
 
-EXPOSE 8080
-
 # Install TINI
 RUN apk add --no-cache tini
 

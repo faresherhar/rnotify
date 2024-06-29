@@ -1,41 +1,46 @@
-from pydantic import Field
-from pydantic_settings import BaseSettings
+from pydantic_settings import (
+    BaseSettings,
+    PydanticBaseSettingsSource,
+    SettingsConfigDict,
+    TomlConfigSettingsSource,
+)
 
 
-# TODO: Add APIs documentation, and detail references
 class Settings(BaseSettings):
-    # Database URI
-    DATABASE_URI: str = Field(validation_alias="RNOTIFY_DATABASE_URI")
+    # Broker, Backend URI
+    broker_uri: str
+    backend_uri: str
 
-    # Github API, Github API Token
-    GITHUB_API: str = "https://api.github.com/repos/"
-    GITHUB_RELEASE_URL: str = "https://github.com/{owner}/{repo}/releases/tag/{tag}"
-    GITHUB_API_TOKEN: str = Field(
-        validation_alias="RNOTIFY_GITHUB_API_TOKEN", default=""
-    )
+    # Github Repositories, API Url, API Token
+    github_repos: list[str]
+    github_api_url: str
+    github_api_token: str
 
-    # Gitlab API, Gitlab API Token
-    GITLAB_API: str = "https://gitlab.com/api/v4/projects/"
-    GITLAB_RELEASE_URL: str = "https://gitlab.com/{owner}/{repo}/-/releases/{tag_name}"
-    GITLAB_API_TOKEN: str = Field(
-        validation_alias="RNOTIFY_GITLAB_API_TOKEN", default=""
-    )
+    # Gitlab Repositories, API Url, API Token
+    gitlab_repos: list[str]
+    gitlab_api_url: str
+    gitlab_api_token: str
 
-    # Notifications templates.
-    NOTIFICATION_TEMPLATES: str = Field(
-        validation_alias="RNOTIFY_NOTIFICATION_TEMPLATES", default=""
-    )
+    # Notification Settings
+    notification_template: str
+    recipient: str
+    smtp_username: str
+    smtp_password: str
+    smtp_server: str
+    smtp_port: int
 
-    # What service to use to send notifications
-    # Multiple methods can be chosen using a list[str].
-    # email, slack, telegram
-    NOTIFICATION_METHODS: str = Field(
-        validation_alias="RNOTIFY_NOTIFICATION_METHODS", default=""
-    )
+    model_config = SettingsConfigDict(toml_file="config.toml")
 
-    # Notification Platforms API
-    TELEGRAM_API: str = "https://api.telegram.org/"
-    SLACK_WEBHOOK_API: str = "https://hooks.slack.com/services/"
+    @classmethod
+    def settings_customise_sources(
+        cls,
+        settings_cls: BaseSettings,
+        init_settings: PydanticBaseSettingsSource,
+        env_settings: PydanticBaseSettingsSource,
+        dotenv_settings: PydanticBaseSettingsSource,
+        file_secret_settings: PydanticBaseSettingsSource,
+    ) -> tuple[PydanticBaseSettingsSource, ...]:
+        return (TomlConfigSettingsSource(settings_cls),)
 
 
 settings = Settings()

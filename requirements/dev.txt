@@ -5,3 +5,5 @@ black==24.4.2
 pytest==8.2.2
 pytest-mock==3.14.0
 smtpdfix==0.5.2
+
+podman-compose
