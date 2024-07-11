@@ -1,61 +1,5 @@
 version: 3.7
 services:
-  rnotify-asgi:
-    image: localhost/username/rnotify-app:v0.0.1
-    container_name: asgi-container
-    command: uvicorn asgi:app --host 0.0.0.0 --port 8080
-    ports:
-      - "8080:8080"
-    environment:
-      - RNOTIFY_DATABASE_URI=postgresql://user:passwd@rnotify-db:5432/rnotify
-    depends_on:
-      - init-rnotify-db
-    restart: on-failure
-
-  rnotify-cleaner:
-    image: localhost/username/rnotify-app:v0.0.1
-    container_name: cleaner-container
-    # It is a CronJob in Kubernetes
-    command: 
-      - /bin/sh
-      - -c
-      - |
-        while true
-        do
-          python main.py clean
-          sleep 36000
-        done
-    environment:
-      - RNOTIFY_DATABASE_URI=postgresql://user:passwd@rnotify-db:5432/rnotify
-    depends_on:
-      - init-rnotify-db
-    restart: on-failure
-
-  rnotify-notifier:
-    image: localhost/username/rnotify-app:v0.0.1
-    container_name: notifier-container
-    # It is a CronJob in Kubernetes
-    command: 
-      - /bin/sh
-      - -c
-      - |
-        while true
-        do
-          python main.py notify
-          sleep 3600
-        done
-    environment:
-      - RNOTIFY_DATABASE_URI=postgresql://user:passwd@rnotify-db:5432/rnotify
-      - RNOTIFY_NOTIFICATION_TEMPLATES=/etc/rnotify/templates/
-      - RNOTIFY_NOTIFICATION_METHODS=telegram
-      - RNOTIFY_TELEGRAM_BOT_TOKEN=
-      - RNOTIFY_TELEGRAM_CHAT_ID=
-    volumes:
-      - ./templates:/etc/rnotify/templates/
-    depends_on:
-      - init-rnotify-db
-    restart: on-failure
-
   rnotify-scraper:
     image: localhost/username/rnotify-app:v0.0.1
     container_name: scraper-container
@@ -66,39 +10,40 @@ services:
       - |
         while true
         do
-          python main.py scrap
-          sleep 60
+          python scraper.py
+          sleep 3600
         done
     environment:
-      - RNOTIFY_DATABASE_URI=postgresql://user:passwd@rnotify-db:5432/rnotify
-      - GITHUB_API_TOKEN=
-      - GITLAB_API_TOKEN=
-    depends_on:
-      - init-rnotify-db
-    restart: on-failure
-
-  rnotify-init-db:
-    image: localhost/username/rnotify-app:v0.0.1
-    container_name: init-db-container
-    command: python init_db.py
-    environment:
-      - RNOTIFY_DATABASE_URI=postgresql://user:passwd@rnotify-db:5432/rnotify
-    depends_on:
-      - rnotify-db
-    restart: no
-
-  rnotify-db:
-    container_name: postgresql-container
-    image: docker.io/postgres:latest
-    ports:
-      - "5432:5432"
-    environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: passwd
-      POSTGRES_DB: rnotify
+      - RNOTIFY_CONFIG_FILE=/etc/rnotify/config.toml
     volumes:
-      - postgres-data:/var/lib/postgresql/data
+      - ./config.toml:/etc/rnotify/config.toml
+    depends_on:
+      - rnotify-notifier
     restart: on-failure
 
+  rnotify-notifier:
+    image: localhost/username/rnotify-app:v0.0.1
+    container_name: notifier-container
+    command: 
+      - /bin/sh
+      - -c
+      - python notifier.py
+    environment:
+      - RNOTIFY_CONFIG_FILE=/etc/rnotify/config.toml
+    volumes:
+      - ./config.toml:/etc/rnotify/config.toml
+      - ./templates/notification.html.j2:/etc/rnotify/templates/notification.html.j2
+    depends_on:
+      - redis
+    restart: on-failure
+
+  redis:
+    image: docker.io/bitnami/redis:7.2.5
+    volumes:
+      - redis:/bitnami/redis/data
+    environment:
+      ALLOW_EMPTY_PASSWORD=yes
+    ports:
+      - "6379:6379"
 volumes:
-  postgres-data: null
+  redis: null

@@ -24,7 +24,9 @@ if __name__ == "__main__":
     # Scrap github repositories for new releases
     if len(settings.github_repos) != 0:
         for repo_name in settings.github_repos:
-            response = get_github_latest_release(repo_name=repo_name, api_token=settings.github_api_token)
+            response = get_github_latest_release(
+                repo_name=repo_name, api_token=settings.github_api_token
+            )
             if response.status_code == 200:
                 new_releases.add(("github", repo_name, response.json()["tag_name"]))
     else:
@@ -33,7 +35,9 @@ if __name__ == "__main__":
     # Scrap gitlab repositories for new releases
     if len(settings.gitlab_repos) != 0:
         for repo_name in settings.gitlab_repos:
-            response = get_gitlab_latest_release(repo_name=repo_name, api_token=settings.gitlab_api_token)
+            response = get_gitlab_latest_release(
+                repo_name=repo_name, api_token=settings.gitlab_api_token
+            )
             if response.status_code == 200:
                 new_releases.add(("gitlab", repo_name, response.json()["tag_name"]))
     else:

@@ -16,7 +16,9 @@ app = Celery(
 
 @app.task(name="rnotify.notifier.send_notification", max_retries=3)
 def send_email_notification(provider: str, repo_name: str, tag_name: str):
-    message_body = render_notification_message(provider=provider, repo_name=repo_name, tag_name=tag_name)    
+    message_body = render_notification_message(
+        provider=provider, repo_name=repo_name, tag_name=tag_name
+    )
     send_email(
         subject="Rnotify Release Notification",
         message_body=message_body,
