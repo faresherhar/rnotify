@@ -1,5 +1,5 @@
 pydantic-settings
-celery
 requests
-redis
+celery
 Jinja2
+redis

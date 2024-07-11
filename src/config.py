@@ -1,5 +1,7 @@
+from os import getenv
 from pydantic_settings import (
     BaseSettings,
+    CliSettingsSource,
     PydanticBaseSettingsSource,
     SettingsConfigDict,
     TomlConfigSettingsSource,
@@ -21,15 +23,17 @@ class Settings(BaseSettings):
     gitlab_api_url: str
     gitlab_api_token: str
 
-    # Notification Settings
+    # Notification Template
     notification_template: str
+
+    # Email Settings
     recipient: str
     smtp_username: str
     smtp_password: str
     smtp_server: str
     smtp_port: int
 
-    model_config = SettingsConfigDict(toml_file="config.toml")
+    model_config = SettingsConfigDict(toml_file=getenv("RNOTIFY_CONFIG_FILE"))
 
     @classmethod
     def settings_customise_sources(
@@ -44,3 +48,4 @@ class Settings(BaseSettings):
 
 
 settings = Settings()
+

@@ -1,5 +1,8 @@
+from requests import Response, get
+from urllib.parse import quote
 from jinja2 import Template
 from json import loads
+import logging
 
 import smtplib, ssl
 from email.mime.text import MIMEText
@@ -8,7 +11,35 @@ from email.mime.multipart import MIMEMultipart
 from config import settings
 
 
+# Define logger
+logger = logging.getLogger(__name__)
+
+
+# Release
+def get_auth(api_token: str) -> dict[str]:
+    "Generates an authentication dictionary."
+    return {"Authorization": f"Bearer {api_token}"} if api_token != "" else {}
+
+
+def get_github_latest_release(repo_name: str, api_token: str) -> Response:
+    "Scrapess the latest github release for a specific github repository."
+    return get(
+        settings.github_api_url + f"{repo_name}/releases/latest",
+        headers=get_auth(api_token=api_token),
+    )
+
+
+def get_gitlab_latest_release(repo_name: str, api_token: str) -> Response:
+    "Scrapes the latest gitlab release for a specific gitlab repository."
+    return get(
+        settings.gitlab_api_url
+        + f"{quote(repo_name, safe='')}/releases/permalink/latest",
+        headers=get_auth(api_token=api_token),
+    )
+
+
 def get_old_releases(db_seassion) -> set[tuple[str]]:
+    "Returns a set of releases that were already scraped."
     releases = set()
     for key in db_seassion.keys():
         if key.startswith("celery-task-meta"):
@@ -19,7 +50,9 @@ def get_old_releases(db_seassion) -> set[tuple[str]]:
     return releases
 
 
-def generate_release_url(provider: str, repo_name: str, tag_name: str) -> str | None:
+# Notification
+def generate_release_url(provider: str, repo_name: str, tag_name: str) -> str:
+    "Generates the URL for the release."
     if provider == "github":
         return f"https://github.com/{repo_name}/releases/tag/{tag_name}"
     elif provider == "gitlab":
@@ -27,6 +60,7 @@ def generate_release_url(provider: str, repo_name: str, tag_name: str) -> str | 
 
 
 def render_notification_message(provider: str, repo_name: str, tag_name: str) -> str:
+    "Generates the notification message, from a Jinja template."
     with open(settings.notification_template) as file_:
         template = Template(file_.read())
 
@@ -40,6 +74,7 @@ def render_notification_message(provider: str, repo_name: str, tag_name: str) ->
         )
 
 
+# Email
 def send_email(
     subject: str,
     message_body: str,
@@ -49,7 +84,7 @@ def send_email(
     smtp_password: str,
     smtp_port: int = 465,
 ) -> None:
-
+    "Sends the nofication email."
     message = MIMEMultipart("alternative")
     message["Subject"] = subject
     message["From"] = smtp_username

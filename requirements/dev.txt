@@ -1,9 +1,4 @@
-# Linting
-black==24.4.2
-
-# Tests
-pytest==8.2.2
-pytest-mock==3.14.0
-smtpdfix==0.5.2
-
+black
+pytest
+pytest-mock
 podman-compose

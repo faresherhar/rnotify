@@ -1,32 +1,49 @@
 from redis import Redis
+import logging
 
 from config import settings
-from utils import render_notification_message, get_old_releases, generate_release_url
-from providers import get_github_latest_release, get_gitlab_latest_release
-from notifier import send_email
+import logging_config
+from notifier import send_email_notification
+from utils import get_old_releases, get_github_latest_release, get_gitlab_latest_release
+
+
+# Define logger
+logger = logging.getLogger("Scraper")
 
 
 if __name__ == "__main__":
-    # with Redis.from_url(settings.backend_uri, decode_responses=True) as db_seassion:
-    #     old_releases = get_old_releases(db_seassion=db_seassion)
+    logger.info("Scraping new releases...")
 
-    # new_releases = set()
+    # Get releases that were already notified, from the backend database
+    with Redis.from_url(settings.backend_uri, decode_responses=True) as db_seassion:
+        old_releases = get_old_releases(db_seassion=db_seassion)
 
-    # for repo_name in settings.github_repos:
-    #     response = get_github_latest_release(repo_name=repo_name, api_token=settings.github_api_token)
-    #     if response.status_code == 200:
-    #         new_releases.add(("github", repo_name, response.json()["tag_name"]))
+    # Save new scraped releases
+    new_releases = set()
 
-    # for repo_name in settings.gitlab_repos:
-    #     response = get_gitlab_latest_release(repo_name=repo_name, api_token=settings.gitlab_api_token)
-    #     if response.status_code == 200:
-    #         new_releases.add(("gitlab", repo_name, response.json()["tag_name"]))
+    # Scrap github repositories for new releases
+    if len(settings.github_repos) != 0:
+        for repo_name in settings.github_repos:
+            response = get_github_latest_release(repo_name=repo_name, api_token=settings.github_api_token)
+            if response.status_code == 200:
+                new_releases.add(("github", repo_name, response.json()["tag_name"]))
+    else:
+        logger.warning("Github repositories not found")
 
-    # for release in new_releases - old_releases:
-    #     send_email_notification.delay(render_notification_message(*release))
+    # Scrap gitlab repositories for new releases
+    if len(settings.gitlab_repos) != 0:
+        for repo_name in settings.gitlab_repos:
+            response = get_gitlab_latest_release(repo_name=repo_name, api_token=settings.gitlab_api_token)
+            if response.status_code == 200:
+                new_releases.add(("gitlab", repo_name, response.json()["tag_name"]))
+    else:
+        logger.warning("Gitlab repositories not found")
 
-    # releases = {('gitlab', 'AuroraOSS/AuroraStore', '4.5.1')}
-    release = ("gitlab", "AuroraOSS/AuroraStore", "4.5.1")
-    message_body = render_notification_message(*release)
-
-    send_email_notification.delay(message_body)
+    # Send notification for the new releases, that were not notified yet
+    releases = new_releases - old_releases
+    if len(releases) != 0:
+        logger.info("Sending email notifications...")
+        for release in releases:
+            send_email_notification.delay(*release)
+    else:
+        logger.info("No new releases found...")
