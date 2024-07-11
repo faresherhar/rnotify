@@ -45,7 +45,7 @@
 
 ## Environment Variables
 
-To run this project, you will need the `RNOTIFY_CONFIG_FILE` environment variable (Mandatory), that indicates to the configuration file full name.
+To run this project, you will need the `RNOTIFY_CONFIG_FILE` environment variable (Mandatory), it indicates the configuration file fullname.
 
 ## Setup Development Enviroment
 
@@ -67,15 +67,9 @@ make setup
 export RNOTIFY_CONFIG_FILE="./config.toml"
 ```
 
-> Database
+> Database Setup
 
 For development, we're using `Redis` as a backend and a brocker at the sametime. In case an alternative is being used, please make sure to update the values in the configuration.
-
-## Local development
-
-Each functionality is run seperatly, despite having the code within the same project. For development, it's better to use 3 different terminals, each part run seperatly.
-
-### Setup redis
 
 Copy the following code into a file nameded `docker-compose.redis.yaml`.
 
@@ -94,9 +88,9 @@ volumes:
   redis: null
 ```
 
-### Run applications
+## Local Development
 
-Use 3 different terminals.
+Each functionality is run seperatly, despite having the code within the same project. For development, it's better to use 3 different terminals, each part run seperatly.
 
 > Terminal 1
 

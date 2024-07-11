@@ -1,0 +1,122 @@
+imagePullSecrets: []
+
+namespaceOverride: ""
+fullnameOverride: ""
+nameOverride: ""
+
+rnotify:
+  name: rnotify
+  schedule: "* * * * *"
+  image:
+    registry: docker.io
+    repository: faresherhar/rnotify-app
+    tag: "sss"
+
+  command:
+    - /bin/sh
+    - -c
+    - date; echo Hello from the Kubernetes cluster
+  imagePullPolicy: IfNotPresent
+
+  securityContext:
+    readOnlyRootFilesystem: true
+    capabilities:
+      drop:
+        - ALL
+    allowPrivilegeEscalation: false
+
+  env: {}
+
+  resources: {}
+
+
+
+securityContext:
+  fsGroup: 10001
+  runAsGroup: 10001
+  runAsNonRoot: true
+  runAsUser: 10001
+
+
+configData:
+  database_uri: "sqlite:///sqlite.db"
+  config_dir: ".config/"
+  providers_file: ".config/providers.yaml"
+  platforms_file: ".config/platforms.yaml"
+  notification_templates: "templates/notification/"
+
+
+
+# Deployment annotations
+annotations: {}
+
+# Deployment annotations
+labels: {}
+
+extraLabels: {}
+
+# Pod Annotations
+podAnnotations: {}
+
+# Pod Labels
+podLabels: {}
+
+## Node labels for pod assignment
+nodeSelector: {}
+
+## Tolerations for pod assignment
+tolerations: []
+
+## Affinity for pod assignment (evaluated as template)
+affinity: {}
+
+
+
+# ## Additional init containers (evaluated as template)
+# ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+# ##
+extraInitContainers: []
+
+## Enable an Specify container in extraContainers. This is meant to allow adding an authentication proxy to a grafana pod
+extraContainers: []
+# extraContainers:
+#   - name: proxy
+#     image: quay.io/gambol99/keycloak-proxy:latest
+#     args:
+#     - -provider=github
+#     - -client-id=
+#     - -client-secret=
+#     - -github-org=<ORG_NAME>
+#     - -email-domain=*
+#     - -cookie-secret=
+#     - -http-address=http://0.0.0.0:4181
+#     - -upstream-url=http://127.0.0.1:3000
+#     ports:
+#       - name: proxy-web
+#         containerPort: 4181
+
+# ## Volumes that can be used in init containers that will not be mounted to deployment pods
+# extraContainerVolumes: []
+# #  - name: volume-from-secret
+# #    secret:
+# #      secretName: secret-to-mount
+# #  - name: empty-dir-volume
+# #    emptyDir: {}
+
+
+
+
+
+
+
+# envValueFrom: {}
+# envFromSecret: ""
+# envRenderSecret: {}
+# envFromSecrets: []
+# envFromConfigMaps: []
+
+# extraSecretMounts: []
+
+# extraVolumeMounts: []
+# extraVolumes: []
+

@@ -1,0 +1,7 @@
+apiVersion: v2
+name: rnotify
+version: 0.0.1
+appVersion: 0.0.1
+kubeVersion: "^1.8.0-0"
+description: The tool for tracking releases
+type: application
