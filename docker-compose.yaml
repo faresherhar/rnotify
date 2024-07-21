@@ -32,7 +32,7 @@ services:
       - RNOTIFY_CONFIG_FILE=/etc/rnotify/config.toml
     volumes:
       - ./config.toml:/etc/rnotify/config.toml
-      - ./templates/notification.html.j2:/etc/rnotify/templates/notification.html.j2
+      - ./templates/notification.html.j2:/home/rnotify/templates/notification.html.j2
     depends_on:
       - redis
     restart: on-failure

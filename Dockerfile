@@ -10,6 +10,7 @@ RUN adduser --disabled-password rnotify && \
 
 # Copy code
 COPY ./requirements/common.txt ./requirements.txt
+COPY ./templates/notification.html.j2 ./templates/notification.html.j2
 COPY ./src ./
 
 # Install PIP packages

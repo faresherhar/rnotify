@@ -1,12 +1,22 @@
-imagePullSecrets: []
-
 namespaceOverride: ""
 fullnameOverride: ""
 nameOverride: ""
 
+imagePullSecrets: []
+
 rnotify:
   name: rnotify
+
+  annotations: {}
+  labels: {}
+
+  podAnnotations: {}
+  podLabels: {}
+  
+  replicas: 1
   schedule: "* * * * *"
+  
+  imagePullPolicy: IfNotPresent
   image:
     registry: docker.io
     repository: faresherhar/rnotify-app
@@ -16,107 +26,55 @@ rnotify:
     - /bin/sh
     - -c
     - date; echo Hello from the Kubernetes cluster
-  imagePullPolicy: IfNotPresent
+
+  env: {}
+
+  resources:
+    requests:
+      memory: "64Mi"
+      cpu: "250m"
+    limits:
+      memory: "128Mi"
+      cpu: "500m"
 
   securityContext:
+    fsGroup: 10001
+    runAsGroup: 10001
+    runAsNonRoot: true
+    runAsUser: 10001
+
+  podSecurityContext:
     readOnlyRootFilesystem: true
     capabilities:
       drop:
         - ALL
     allowPrivilegeEscalation: false
 
-  env: {}
+  extraInitContainers: []
+  extraContainers: []
 
-  resources: {}
+  extraVolumeMounts: []
+  extraVolumes: []
 
+  tolerations: []
+  nodeSelector: {}
+  affinity: {}
 
+  config: |
+    broker_uri="redis://localhost:6379"
+    backend_uri="redis://localhost:6379"
 
-securityContext:
-  fsGroup: 10001
-  runAsGroup: 10001
-  runAsNonRoot: true
-  runAsUser: 10001
+    github_repos=["grafana/grafana", "derailed/k9s"]
+    github_api_url="https://api.github.com/repos/"
+    github_api_token=""
 
+    gitlab_repos=["AuroraOSS/AuroraStore"]
+    gitlab_api_url="https://gitlab.com/api/v4/projects/"
+    gitlab_api_token=""
 
-configData:
-  database_uri: "sqlite:///sqlite.db"
-  config_dir: ".config/"
-  providers_file: ".config/providers.yaml"
-  platforms_file: ".config/platforms.yaml"
-  notification_templates: "templates/notification/"
-
-
-
-# Deployment annotations
-annotations: {}
-
-# Deployment annotations
-labels: {}
-
-extraLabels: {}
-
-# Pod Annotations
-podAnnotations: {}
-
-# Pod Labels
-podLabels: {}
-
-## Node labels for pod assignment
-nodeSelector: {}
-
-## Tolerations for pod assignment
-tolerations: []
-
-## Affinity for pod assignment (evaluated as template)
-affinity: {}
-
-
-
-# ## Additional init containers (evaluated as template)
-# ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
-# ##
-extraInitContainers: []
-
-## Enable an Specify container in extraContainers. This is meant to allow adding an authentication proxy to a grafana pod
-extraContainers: []
-# extraContainers:
-#   - name: proxy
-#     image: quay.io/gambol99/keycloak-proxy:latest
-#     args:
-#     - -provider=github
-#     - -client-id=
-#     - -client-secret=
-#     - -github-org=<ORG_NAME>
-#     - -email-domain=*
-#     - -cookie-secret=
-#     - -http-address=http://0.0.0.0:4181
-#     - -upstream-url=http://127.0.0.1:3000
-#     ports:
-#       - name: proxy-web
-#         containerPort: 4181
-
-# ## Volumes that can be used in init containers that will not be mounted to deployment pods
-# extraContainerVolumes: []
-# #  - name: volume-from-secret
-# #    secret:
-# #      secretName: secret-to-mount
-# #  - name: empty-dir-volume
-# #    emptyDir: {}
-
-
-
-
-
-
-
-# envValueFrom: {}
-# envFromSecret: ""
-# envRenderSecret: {}
-# envFromSecrets: []
-# envFromConfigMaps: []
-
-# extraSecretMounts: []
-
-# extraVolumeMounts: []
-# extraVolumes: []
-
+    notification_template="/home/rnotify/templates/notification.html.j2"
+    recipient="recipient@example-email.com"
+    smtp_username="username@example-email.com"
+    smtp_password="password"
+    smtp_server="smtp.example-email.com"
+    smtp_port=465

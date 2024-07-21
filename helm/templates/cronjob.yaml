@@ -18,78 +18,17 @@ spec:
       {{- include "rnotify.selectorLabels" . | nindent 6 }}
   schedule: "{{ .Values.rnotify.schedule }}"
   jobTemplate:
-    metadata:
-      labels:
-        {{- include "rnotify.selectorLabels" . | nindent 8 }}
-        {{- with .Values.podLabels }}
-        {{- toYaml . | nindent 8 }}
-        {{- end }}
-      {{- with .Values.annotations }}
-      annotations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-        {{- with .Values.podAnnotations }}
-        {{- toYaml . | nindent 8 }}
-        {{- end }}
     spec:
       template:
         metadata:
-          {{- with .Values.podLabels }}
-          labels:  
+          labels:
+            {{- include "rnotify.selectorLabels" . | nindent 12 }}
+            {{- with .Values.podLabels }}
             {{- toYaml . | nindent 12 }}
-          {{- end }}
+            {{- end }}
           {{- with .Values.podAnnotations }}
           annotations:
             {{- toYaml . | nindent 12 }}
           {{- end }}
         spec:
-          {{- with .Values.securityContext }}
-          securityContext:
-            {{- toYaml . | nindent 12 }}
-          {{- end }}
-          {{- with .Values.imagePullSecrets }}
-          imagePullSecrets:
-            {{- toYaml . | nindent 12 }}
-          {{- end }}
-          initContainers:
-            {{- with .Values.extraInitContainers }}
-              {{- toYaml . | nindent 12 }}
-            {{- end }}
-          containers:
-            {{- with .Values.extraContainers }}
-              {{- toYaml . | nindent 12 }}
-            {{- end }}
-            - name: {{ .Values.rnotify.name }}
-              image: {{ .Values.rnotify.image.registry }}/{{ .Values.rnotify.image.repository }}:{{ .Values.rnotify.image.tag }}
-              {{- with .Values.rnotify.command }}
-              command:
-                {{- toYaml . | nindent 16 }}
-              {{- end }}
-              imagePullPolicy: {{ .Values.rnotify.imagePullPolicy }}
-              {{- with .Values.rnotify.securityContext }}
-              securityContext:
-                {{- toYaml . | nindent 16 }}
-              {{- end }}
-              env:
-                {{- range $key, $value := .Values.rnotify.env }}
-                - name: {{ $key }}
-                  value: "{{ $value }}"
-                {{- end }}
-                - name: RNOTIFY_CONFIG_FILE
-                  valueFrom:
-                    configMapKeyRef:
-                      name: {{ include "rnotify.fullname" . }}
-                      key: config_dir
-          restartPolicy: OnFailure
-          {{- with .Values.nodeSelector }}
-          nodeSelector:
-            {{- toYaml . | nindent 12 }}
-          {{- end }}
-          {{- with .Values.affinity }}
-          affinity:
-            {{- toYaml . | nindent 12 }}
-          {{- end }}
-          {{- with .Values.tolerations }}
-          tolerations:
-            {{- toYaml . | nindent 12 }}
-          {{- end }}
+          {{- include "rnotify.pod" . | nindent 10 }}

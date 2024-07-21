@@ -1,0 +1,17 @@
+broker_uri="redis://redis:6379"
+backend_uri="redis://redis:6379"
+
+github_repos=["grafana/grafana", "derailed/k9s"]
+github_api_url="https://api.github.com/repos/"
+github_api_token=""
+
+gitlab_repos=["AuroraOSS/AuroraStore"]
+gitlab_api_url="https://gitlab.com/api/v4/projects/"
+gitlab_api_token=""
+
+notification_template="/etc/rnotify/templates/notification.html.j2"
+recipient="jolucos.geruteb@jollyfree.com"
+smtp_username="herhar.fares@yandex.com"
+smtp_password="fkolowxwbeoakxzo"
+smtp_server="smtp.yandex.com"
+smtp_port=465
