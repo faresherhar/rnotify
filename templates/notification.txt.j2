@@ -1,0 +1,3 @@
+{% for release in releases %}
+    {{ release.provider }} {{ release.repo_name }} {{ release.tag_name }} {{ release.release_url }}
+{% endfor %}
