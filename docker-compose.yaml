@@ -1,0 +1,28 @@
+version: 3.7
+services:
+  rnotify:
+    image: localhost/username/rnotify
+    container_name: rnotify-container
+    environment:
+      - RNOTIFY_CONFIG_FILE=/etc/rnotify/config.toml
+    volumes:
+      - ./config.toml:/etc/rnotify/config.toml
+    depends_on:
+      - rnotify-db
+    restart: on-failure
+
+  rnotify-db:
+    container_name: rnotify-db-container
+    image: docker.io/postgres:latest
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: passwd
+      POSTGRES_DB: rnotify
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    restart: on-failure
+
+volumes:
+  postgres-data: null

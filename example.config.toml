@@ -1,0 +1,33 @@
+## Database URI
+# postgresql://[user[:password]@][netloc][:port][/dbname]
+database_uri = ""
+
+## GitHub Configuration
+# github_api_token="dXNlckBleGFtcGxlLmNvbTpzZWNyZXQ="
+# github_repos=["grafana/grafana", "derailed/k9s"]
+github_api_url = "https://api.github.com/repos/"
+github_api_token = ""
+github_repos = []
+
+## GitLab Configuration
+# gitlab_api_token="dXNlckBleGFtcGxlLmNvbTpzZWNyZXQ="
+# gitlab_repos=["AuroraOSS/AuroraStore"]
+gitlab_api_url = "https://gitlab.com/api/v4/projects/"
+gitlab_api_token = ""
+gitlab_repos = []
+
+## HTML Notification Template
+# notification_template="./templates/notification.html.j2"
+notification_template = ""
+
+## Email Configuration
+# recipient="recipient@example-email.com"
+# smtp_username="username@example-email.com"
+# smtp_password="password"
+# smtp_server="smtp.example-email.com"
+# smtp_port=465
+recipient = ""
+smtp_username = ""
+smtp_password = ""
+smtp_server = ""
+smtp_port = 465

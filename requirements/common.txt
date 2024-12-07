@@ -1,0 +1,5 @@
+pydantic-settings
+requests
+Jinja2
+psycopg2-binary
+sqlalchemy
